@@ -1,32 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.AspNetCore.Mvc;
-using WebStore.Models;
+﻿using Microsoft.AspNetCore.Mvc;
 
 namespace WebStore.Controllers
 {
     public class HomeController : Controller
     {
-        private static readonly List<Employee> _employees = new ()
-        {
-            new Employee { Id = 1, LastName = "Иванов", FirstName = "Иван", Patronymic = "Иванович", BirthDate = new DateTime(1985, 03, 23) },
-            new Employee { Id = 2, LastName = "Петров", FirstName = "Петр", Patronymic = "Петрович", BirthDate = new DateTime(1995, 07, 27) },
-            new Employee { Id = 3, LastName = "Сидоров", FirstName = "Сидор", Patronymic = "Сидорович", BirthDate = new DateTime(2001, 11, 21) },
-        };
+        public IActionResult Index() => View();
 
-        public IActionResult Index()
-        {
-            return View();
-        }
-
-        public IActionResult SecondAction(int id)
-        {
-            return Content($"Hello from SecondAction with id = {id}!");
-        }
-
-        public IActionResult Employees()
-        {
-            return View(_employees);
-        }
     }
 }

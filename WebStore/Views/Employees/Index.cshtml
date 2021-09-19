@@ -4,6 +4,8 @@
     <h3>Сотрудники</h3>
     <hr />
 
+    <p><a asp-action="Create" class="btn btn-default">Добавить сотрудника</a></p>
+
     <table class="table">
         <thead>
             <tr>
@@ -19,19 +21,21 @@
         <tbody>
             @foreach (var item in Model)
             {
-            <tr>
-                <td>@item.Id</td>
-                <td>@item.LastName</td>
-                <td>@item.FirstName</td>
-                <td>@item.Patronymic</td>
-                <td>@item.Age</td>
-                <td>
-                    <a asp-controller="Employees" asp-action="Details" asp-route-id="@item.Id"><i class="fa fa-info"></i></a>
-                </td>
-            </tr>
+                <tr>
+                    <td>@item.Id</td>
+                    <td>@item.LastName</td>
+                    <td>@item.FirstName</td>
+                    <td>@item.Patronymic</td>
+                    <td>@item.Age</td>
+                    <td>
+                        <a asp-controller="Employees" asp-action="Details" asp-route-id="@item.Id" title="Информация"><i class="fa fa-info"></i></a>&nbsp;
+                        <a asp-controller="Employees" asp-action="Edit" asp-route-id="@item.Id" title="Редактирование"><i class="fa fa-edit"></i></a>&nbsp;
+                        <a asp-controller="Employees" asp-action="Delete" asp-route-id="@item.Id" title="Удаление"><i class="fa fa-times" style="color:red"></i></a>
+                    </td>
+                </tr>
             }
         </tbody>
     </table>
 
-    <p><a asp-controller="Home" class="btn btn-default">Домой</a></p>
+    <p><a asp-controller="Home" asp-action="Index" class="btn btn-default">Домой</a></p>
 </div>

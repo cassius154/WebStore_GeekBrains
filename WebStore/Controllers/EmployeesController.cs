@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using WebStore.Data;
 using WebStore.Models;
@@ -15,5 +16,21 @@ namespace WebStore.Controllers
         }
 
         public IActionResult Index() => View(_employees);
+
+        public IActionResult Details(int? id)
+        {
+            if (id is null)
+            {
+                return NotFound();
+            }
+
+            var emp = _employees.SingleOrDefault(e => e.Id == id);
+            if (emp is null)
+            {
+                return NotFound();
+            }
+
+            return View(emp);
+        }
     }
 }

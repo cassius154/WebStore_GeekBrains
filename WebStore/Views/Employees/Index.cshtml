@@ -12,6 +12,7 @@
                 <th>Имя</th>
                 <th>Отчество</th>
                 <th>Возраст</th>
+                <th></th>
             </tr>
         </thead>
 
@@ -24,6 +25,9 @@
                 <td>@item.FirstName</td>
                 <td>@item.Patronymic</td>
                 <td>@item.Age</td>
+                <td>
+                    <a asp-controller="Employees" asp-action="Details" asp-route-id="@item.Id"><i class="fa fa-info"></i></a>
+                </td>
             </tr>
             }
         </tbody>

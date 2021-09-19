@@ -17,14 +17,8 @@
 </head><!--/head-->
 
 <body>
-    <partial name="Partial/_Header"/>
-
     @RenderBody()
 
-    <partial name="Partial/_Footer">
-
     <partial name="Partial/_Scripts" />
-
-    @RenderSection("Scripts", required: false)
 </body>
 </html>

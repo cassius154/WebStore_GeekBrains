@@ -21,7 +21,7 @@ namespace WebStore.Services
                 FirstName = emp.FirstName,
                 Patronymic = emp.Patronymic,
                 BirthDate = emp.BirthDate,
-                Id = (TestData.Employees.OrderBy(e => e.Id).LastOrDefault()?.Id).GetValueOrDefault() + 1,
+                Id = (TestData.Employees.OrderByDescending(e => e.Id).FirstOrDefault()?.Id).GetValueOrDefault() + 1,
             };
 
             TestData.Employees.Add(ret);

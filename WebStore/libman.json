@@ -13,6 +13,14 @@
     {
       "library": "font-awesome@4.0.3",
       "destination": "wwwroot/lib/font-awesome/"
+    },
+    {
+      "library": "jquery-validate@1.17.0",
+      "destination": "wwwroot/lib/jquery-validation/dist/"
+    },
+    {
+      "library": "jquery-validation-unobtrusive@3.2.9",
+      "destination": "wwwroot/lib/jquery-validation-unobtrusive/"
     }
   ]
 }

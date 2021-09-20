@@ -20,8 +20,9 @@ namespace WebStore.Models
 
         [Display(Name = "Дата рождения")]
         [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:dd.MM.yyyy}")]
         [Required(ErrorMessage = "Дата рождения обязательна к заполнению")]
+        [DisplayFormat(DataFormatString = "{0:dd.MM.yyyy}")]
+        //[DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}", ApplyFormatInEditMode = true)]
         //[DisplayFormat(DataFormatString = "{0:dd.MM.yyyy}", ApplyFormatInEditMode = true)]  - при редактировании не работает!!
         public DateTime BirthDate { get; set; }
 

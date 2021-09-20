@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using WebStore.Data;
@@ -56,6 +57,7 @@ namespace WebStore.Controllers
         [HttpPost]
         public IActionResult Edit(Employee model)
         {
+            _validateModel(model);
             if (!ModelState.IsValid)
             {
                 return View(model);
@@ -75,6 +77,7 @@ namespace WebStore.Controllers
         [HttpPost]
         public IActionResult Create(Employee model)
         {
+            _validateModel(model);
             if (!ModelState.IsValid)
             {
                 return View(model);
@@ -110,6 +113,15 @@ namespace WebStore.Controllers
                 _empService.Delete(id.Value);
             }
             return RedirectToAction("Index");
+        }
+
+
+        private void _validateModel(Employee model)
+        {
+            if (model.BirthDate.Date > DateTime.Today)
+            {
+                ModelState.AddModelError("BirthDate", "Дата рождения больше текущей");
+            }
         }
     }
 }

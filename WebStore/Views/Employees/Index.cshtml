@@ -26,7 +26,7 @@
                     <td>@item.LastName</td>
                     <td>@item.FirstName</td>
                     <td>@item.Patronymic</td>
-                    <td>@item.Age</td>
+                    <td><span title="@item.BirthDate.ToString("dd.MM.yyyy")">@item.Age</span></td>
                     <td>
                         <a asp-controller="Employees" asp-action="Details" asp-route-id="@item.Id" title="Информация"><i class="fa fa-info"></i></a>&nbsp;
                         <a asp-controller="Employees" asp-action="Edit" asp-route-id="@item.Id" title="Редактирование"><i class="fa fa-edit"></i></a>&nbsp;

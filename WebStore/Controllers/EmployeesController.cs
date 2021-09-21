@@ -45,7 +45,8 @@ namespace WebStore.Controllers
         {
             if (id is null)
             {
-                return BadRequest();
+                //return BadRequest();
+                return View(new EmployeeViewModel());
             }
 
             var emp = _empService.GetEmployee(id.Value);
@@ -66,19 +67,30 @@ namespace WebStore.Controllers
                 return View(model);
             }
 
-            var emp = _empService.Edit(EmployeeViewModel.CreateEmployee(model));
-            if (emp is null)
+            var emp = EmployeeViewModel.CreateEmployee(model);
+            if (model.Id == 0)
             {
-                return NotFound();
+               _ = _empService.Add(EmployeeViewModel.CreateEmployee(model));
+            }
+            else
+            {
+                emp = _empService.Edit(EmployeeViewModel.CreateEmployee(model));
+                if (emp is null)
+                {
+                    return NotFound();
+                }
             }
 
             return RedirectToAction("Index");
         }
 
-        public IActionResult Create() => View();
+        public IActionResult Create1() => View();
+
+        public IActionResult Create2() => View("Edit", new EmployeeViewModel());
+
 
         [HttpPost]
-        public IActionResult Create(EmployeeViewModel model)
+        public IActionResult Create1(EmployeeViewModel model)
         {
             _validateModel(model);
             if (!ModelState.IsValid)
@@ -121,7 +133,7 @@ namespace WebStore.Controllers
 
         private void _validateModel(EmployeeViewModel model)
         {
-            if (model.BirthDate.Date > DateTime.Today)
+            if (model.BirthDate.Value.Date > DateTime.Today)
             {
                 ModelState.AddModelError("BirthDate", "Дата рождения больше текущей");
             }

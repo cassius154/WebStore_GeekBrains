@@ -28,16 +28,16 @@ namespace WebStore.ViewModels
         [DisplayFormat(DataFormatString = "{0:dd.MM.yyyy}")]
         //[DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}", ApplyFormatInEditMode = true)]
         //[DisplayFormat(DataFormatString = "{0:dd.MM.yyyy}", ApplyFormatInEditMode = true)]  - при редактировании не работает!!
-        public DateTime BirthDate { get; set; }
+        public DateTime? BirthDate { get; set; }
 
         [Display(Name = "Возраст")]
         public int Age
         {
             get
             {
-                DateTime now = DateTime.Today;
-                int age = now.Year - BirthDate.Year;
-                if (BirthDate > now.AddYears(-age)) age--;
+                DateTime dtNow = DateTime.Today;
+                int age = dtNow.Year - BirthDate.Value.Year;
+                if (BirthDate > dtNow.AddYears(-age)) age--;
                 return age;
             }
         }
@@ -50,7 +50,7 @@ namespace WebStore.ViewModels
                 FirstName = model.FirstName,
                 LastName = model.LastName,
                 Patronymic = model.Patronymic,
-                BirthDate = model.BirthDate,
+                BirthDate = model.BirthDate.Value,
             };
         }
 

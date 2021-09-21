@@ -27,7 +27,7 @@ namespace WebStore.Controllers
         //[Route("~/employees/info-{id}")]
         public IActionResult Details(int? id)
         {
-            if (id is null)
+            if (id is null || id.Value < 1)
             {
                 return BadRequest();
             }
@@ -45,8 +45,11 @@ namespace WebStore.Controllers
         {
             if (id is null)
             {
-                //return BadRequest();
                 return View(new EmployeeViewModel());
+            }
+            if (id.Value < 1)
+            {
+                return BadRequest();
             }
 
             var emp = _empService.GetEmployee(id.Value);
@@ -105,7 +108,7 @@ namespace WebStore.Controllers
 
         public IActionResult Delete(int? id)
         {
-            if (id is null)
+            if (id is null || id.Value < 1)
             {
                 return BadRequest();
             }
@@ -127,6 +130,7 @@ namespace WebStore.Controllers
             {
                 _empService.Delete(id.Value);
             }
+
             return RedirectToAction("Index");
         }
 
@@ -136,6 +140,15 @@ namespace WebStore.Controllers
             if (model.BirthDate.Value.Date > DateTime.Today)
             {
                 ModelState.AddModelError("BirthDate", "Дата рождения больше текущей");
+            }
+            if (model.Age > 150)
+            {
+                ModelState.AddModelError("BirthDate", "Проверьте внимательно год рождения!");
+            }
+
+            if ((model.FirstName ?? "").Any(char.IsDigit) || (model.LastName ?? "").Any(char.IsDigit) || (model.Patronymic ?? "").Any(char.IsDigit))
+            {
+                ModelState.AddModelError("", "В именах не должно быть цифр");
             }
         }
     }

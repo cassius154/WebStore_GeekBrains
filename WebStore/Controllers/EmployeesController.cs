@@ -5,6 +5,8 @@ using WebStore.Services.Interfaces;
 
 namespace WebStore.Controllers
 {
+    //[Route("Employees/[action]/{id?}")]
+    //[Route("Staff/[action]/{id?}")]
     public class EmployeesController : Controller
     {
         //private readonly IEnumerable<Employee> _employees;
@@ -17,8 +19,10 @@ namespace WebStore.Controllers
             _empService = empService;
         }
 
+        //[Route("~/employees/all")]
         public IActionResult Index() => View(_empService.GetEmployeeList());
 
+        //[Route("~/employees/info-{id}")]
         public IActionResult Details(int? id)
         {
             if (id is null)

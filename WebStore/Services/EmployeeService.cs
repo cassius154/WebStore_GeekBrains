@@ -9,6 +9,25 @@ namespace WebStore.Services
 {
     public class EmployeeService
     {
+
+        private int _maxId;
+
+        public EmployeeService()
+        {
+            _maxId = _getMaxId();
+            //_maxId = _getMaxIntValue(TestData.Employees, e => e.Id);
+        }
+
+        private static int _getMaxId()
+        {
+            return TestData.Employees.Any() ? TestData.Employees.Max(e => e.Id) : 0;
+        }
+
+        private static int _getMaxIntValue<T>(IEnumerable<T> list, Func<T, int> selector)
+        {
+            return list.Any() ? list.Max(selector) : 0;
+        }
+
         public IEnumerable<Employee> GetEmployeeList() => TestData.Employees;
 
         public Employee GetEmployee(int id) => TestData.Employees.SingleOrDefault(e => e.Id == id);
@@ -21,7 +40,9 @@ namespace WebStore.Services
                 FirstName = emp.FirstName,
                 Patronymic = emp.Patronymic,
                 BirthDate = emp.BirthDate,
-                Id = (TestData.Employees.OrderByDescending(e => e.Id).FirstOrDefault()?.Id).GetValueOrDefault() + 1,
+                //Id = (TestData.Employees.OrderByDescending(e => e.Id).FirstOrDefault()?.Id).GetValueOrDefault() + 1,
+                //Id = _getMaxId() + 1,
+                Id = ++_maxId,
             };
 
             TestData.Employees.Add(ret);

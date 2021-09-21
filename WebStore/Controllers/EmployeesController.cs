@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Linq;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using WebStore.Models;
 using WebStore.Services.Interfaces;
+using WebStore.ViewModels;
 
 namespace WebStore.Controllers
 {
@@ -9,25 +12,24 @@ namespace WebStore.Controllers
     //[Route("Staff/[action]/{id?}")]
     public class EmployeesController : Controller
     {
-        //private readonly IEnumerable<Employee> _employees;
-
         private readonly IEmployeeService _empService;
+        private readonly ILogger<EmployeesController> _logger;
 
-        public EmployeesController(IEmployeeService empService)
+        public EmployeesController(IEmployeeService empService, ILogger<EmployeesController> logger)
         {
-            //_employees = TestData.Employees;
+            _logger = logger;
             _empService = empService;
         }
 
         //[Route("~/employees/all")]
-        public IActionResult Index() => View(_empService.GetEmployeeList());
+        public IActionResult Index() => View(_empService.GetEmployeeList().Select(e => EmployeeViewModel.CreateEmployeeViewModel(e)));
 
         //[Route("~/employees/info-{id}")]
         public IActionResult Details(int? id)
         {
             if (id is null)
             {
-                return NotFound();
+                return BadRequest();
             }
 
             var emp = _empService.GetEmployee(id.Value);
@@ -36,14 +38,14 @@ namespace WebStore.Controllers
                 return NotFound();
             }
 
-            return View(emp);
+            return View(EmployeeViewModel.CreateEmployeeViewModel(emp));
         }
 
         public IActionResult Edit(int? id)
         {
             if (id is null)
             {
-                return NotFound();
+                return BadRequest();
             }
 
             var emp = _empService.GetEmployee(id.Value);
@@ -52,11 +54,11 @@ namespace WebStore.Controllers
                 return NotFound();
             }
 
-            return View(emp);
+            return View(EmployeeViewModel.CreateEmployeeViewModel(emp));
         }
 
         [HttpPost]
-        public IActionResult Edit(Employee model)
+        public IActionResult Edit(EmployeeViewModel model)
         {
             _validateModel(model);
             if (!ModelState.IsValid)
@@ -64,7 +66,7 @@ namespace WebStore.Controllers
                 return View(model);
             }
 
-            var emp = _empService.Edit(model);
+            var emp = _empService.Edit(EmployeeViewModel.CreateEmployee(model));
             if (emp is null)
             {
                 return NotFound();
@@ -76,7 +78,7 @@ namespace WebStore.Controllers
         public IActionResult Create() => View();
 
         [HttpPost]
-        public IActionResult Create(Employee model)
+        public IActionResult Create(EmployeeViewModel model)
         {
             _validateModel(model);
             if (!ModelState.IsValid)
@@ -84,7 +86,7 @@ namespace WebStore.Controllers
                 return View(model);
             }
 
-            _empService.Add(model);
+            _empService.Add(EmployeeViewModel.CreateEmployee(model));
 
             return RedirectToAction("Index");
         }
@@ -93,7 +95,7 @@ namespace WebStore.Controllers
         {
             if (id is null)
             {
-                return NotFound();
+                return BadRequest();
             }
 
             var emp = _empService.GetEmployee(id.Value);
@@ -102,7 +104,7 @@ namespace WebStore.Controllers
                 return NotFound();
             }
 
-            return View(emp);
+            return View(EmployeeViewModel.CreateEmployeeViewModel(emp));
         }
 
         [HttpPost]
@@ -117,7 +119,7 @@ namespace WebStore.Controllers
         }
 
 
-        private void _validateModel(Employee model)
+        private void _validateModel(EmployeeViewModel model)
         {
             if (model.BirthDate.Date > DateTime.Today)
             {

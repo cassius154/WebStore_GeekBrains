@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.Extensions.Logging;
 using WebStore.Data;
 using WebStore.Models;
 using WebStore.Services.Interfaces;
@@ -10,10 +11,12 @@ namespace WebStore.Services
     public class MemoryEmployeeService : IEmployeeService
     {
 
+        private readonly ILogger<MemoryEmployeeService> _logger;
         private int _maxId;
 
-        public MemoryEmployeeService()
+        public MemoryEmployeeService(ILogger<MemoryEmployeeService> logger)
         {
+            _logger = logger;
             _maxId = _getMaxId();
             //_maxId = _getMaxIntValue(TestData.Employees, e => e.Id);
         }
@@ -43,6 +46,16 @@ namespace WebStore.Services
 
         public Employee Add(Employee emp)
         {
+            if (emp == null)
+            {
+                throw new ArgumentNullException(nameof(emp));
+            }
+
+            if (TestData.Employees.Contains(emp))
+            {
+                return emp;
+            }
+
             var ret = new Employee
             {
                 LastName = emp.LastName,
@@ -60,6 +73,16 @@ namespace WebStore.Services
 
         public Employee Edit(Employee emp)
         {
+            if (emp == null)
+            {
+                throw new ArgumentNullException(nameof(emp));
+            }
+
+            if (TestData.Employees.Contains(emp))  //Только для реализации "в памяти"!!
+            {
+                return emp;
+            }
+
             var e = GetEmployee(emp.Id);
             if (e != null)
             {
@@ -69,16 +92,19 @@ namespace WebStore.Services
                 e.BirthDate = emp.BirthDate;
             }
 
-            return emp;
+            return e;
         }
 
-        public void Delete(int id)
+        public bool Delete(int id)
         {
             var e = GetEmployee(id);
             if (e != null)
             {
                 TestData.Employees.Remove(e);
+                return true;
             }
+
+            return false;
         }
     }
 }

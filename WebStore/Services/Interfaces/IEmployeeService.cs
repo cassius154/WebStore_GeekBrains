@@ -12,8 +12,9 @@ namespace WebStore.Services.Interfaces
 
         Employee Add(Employee emp);
         
-        void Delete(int id);
-        
         Employee Edit(Employee emp);
+
+        bool Delete(int id);
+
     }
 }

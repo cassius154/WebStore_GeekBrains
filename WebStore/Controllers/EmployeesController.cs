@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using Microsoft.AspNetCore.Mvc;
-using WebStore.Data;
 using WebStore.Models;
-using WebStore.Services;
+using WebStore.Services.Interfaces;
 
 namespace WebStore.Controllers
 {
@@ -12,12 +9,12 @@ namespace WebStore.Controllers
     {
         //private readonly IEnumerable<Employee> _employees;
 
-        private readonly EmployeeService _empService;
+        private readonly IEmployeeService _empService;
 
-        public EmployeesController()
+        public EmployeesController(IEmployeeService empService)
         {
             //_employees = TestData.Employees;
-            _empService = new EmployeeService();
+            _empService = empService;
         }
 
         public IActionResult Index() => View(_empService.GetEmployeeList());

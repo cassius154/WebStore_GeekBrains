@@ -1,18 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using WebStore.Data;
 using WebStore.Models;
+using WebStore.Services.Interfaces;
 
 namespace WebStore.Services
 {
-    public class EmployeeService
+    public class MemoryEmployeeService : IEmployeeService
     {
 
         private int _maxId;
 
-        public EmployeeService()
+        public MemoryEmployeeService()
         {
             _maxId = _getMaxId();
             //_maxId = _getMaxIntValue(TestData.Employees, e => e.Id);
@@ -28,7 +28,16 @@ namespace WebStore.Services
             return list.Any() ? list.Max(selector) : 0;
         }
 
-        public IEnumerable<Employee> GetEmployeeList() => TestData.Employees;
+        public IEnumerable<Employee> GetEmployeeList(Func<Employee, bool> predicate = null)
+        {
+            var ret = TestData.Employees.AsEnumerable();
+            if (predicate != null)
+            {
+                ret = ret.Where(predicate);
+            }
+
+            return ret;
+        }
 
         public Employee GetEmployee(int id) => TestData.Employees.SingleOrDefault(e => e.Id == id);
 

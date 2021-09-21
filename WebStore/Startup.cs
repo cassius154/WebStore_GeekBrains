@@ -43,6 +43,9 @@ namespace WebStore
 
             app.UseMiddleware<TestMiddleware>();
 
+            //app.UseWelcomePage();
+            //app.UseWelcomePage("/welcome");
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapGet("/greetings", async context =>

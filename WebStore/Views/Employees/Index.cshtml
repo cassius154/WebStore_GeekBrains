@@ -31,6 +31,11 @@
                         <a asp-controller="Employees" asp-action="Details" asp-route-id="@item.Id" title="Информация"><i class="fa fa-info"></i></a>&nbsp;
                         <a asp-controller="Employees" asp-action="Edit" asp-route-id="@item.Id" title="Редактирование"><i class="fa fa-edit"></i></a>&nbsp;
                         <a asp-controller="Employees" asp-action="Delete" asp-route-id="@item.Id" title="Удаление"><i class="fa fa-times" style="color:red"></i></a>
+                        <form asp-action="Delete" asp-route-id="@item.Id">
+                            <p>
+                                <input type="submit" value="Del direct" class="btn btn-xs btn-danger" />
+                            </p>
+                        </form>
                     </td>
                 </tr>
             }

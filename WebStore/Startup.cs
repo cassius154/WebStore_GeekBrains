@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using WebStore.Infrastructure.Middleware;
 using WebStore.Services;
 using WebStore.Services.Interfaces;
 
@@ -37,6 +38,8 @@ namespace WebStore
 
             app.UseStaticFiles();
             app.UseRouting();
+
+            app.UseMiddleware<TestMiddleware>();
 
             app.UseEndpoints(endpoints =>
             {

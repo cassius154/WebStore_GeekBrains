@@ -56,19 +56,12 @@ namespace WebStore.Services
                 return emp;
             }
 
-            var ret = new Employee
-            {
-                LastName = emp.LastName,
-                FirstName = emp.FirstName,
-                Patronymic = emp.Patronymic,
-                BirthDate = emp.BirthDate,
-                //Id = (TestData.Employees.OrderByDescending(e => e.Id).FirstOrDefault()?.Id).GetValueOrDefault() + 1,
-                //Id = _getMaxId() + 1,
-                Id = ++_maxId,
-            };
+            //emp.Id = (TestData.Employees.OrderByDescending(e => e.Id).FirstOrDefault()?.Id).GetValueOrDefault() + 1;
+            //emp.Id = _getMaxId() + 1;
+            emp.Id = ++_maxId;
 
-            TestData.Employees.Add(ret);
-            return ret;
+            TestData.Employees.Add(emp);
+            return emp;
         }
 
         public Employee Edit(Employee emp)

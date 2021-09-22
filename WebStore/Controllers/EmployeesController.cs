@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using WebStore.Models;
 using WebStore.Services.Interfaces;
 using WebStore.ViewModels;
+using WebStore.DTO;
 
 namespace WebStore.Controllers
 {
@@ -22,7 +23,7 @@ namespace WebStore.Controllers
         }
 
         //[Route("~/employees/all")]
-        public IActionResult Index() => View(_empService.GetEmployeeList().Select(e => EmployeeViewModel.CreateEmployeeViewModel(e)));
+        public IActionResult Index() => View(_empService.GetEmployeeList().Select(e => DataMapper.CreateEmployeeViewModel(e)));
 
         //[Route("~/employees/info-{id}")]
         public IActionResult Details(int? id)
@@ -38,7 +39,7 @@ namespace WebStore.Controllers
                 return NotFound();
             }
 
-            return View(EmployeeViewModel.CreateEmployeeViewModel(emp));
+            return View(DataMapper.CreateEmployeeViewModel(emp));
         }
 
         public IActionResult Edit(int? id)
@@ -58,7 +59,7 @@ namespace WebStore.Controllers
                 return NotFound();
             }
 
-            return View(EmployeeViewModel.CreateEmployeeViewModel(emp));
+            return View(DataMapper.CreateEmployeeViewModel(emp));
         }
 
         [HttpPost]
@@ -70,14 +71,14 @@ namespace WebStore.Controllers
                 return View(model);
             }
 
-            var emp = EmployeeViewModel.CreateEmployee(model);
+            var emp = DataMapper.CreateEmployee(model);
             if (model.Id == 0)
             {
-               _ = _empService.Add(EmployeeViewModel.CreateEmployee(model));
+               _ = _empService.Add(DataMapper.CreateEmployee(model));
             }
             else
             {
-                emp = _empService.Edit(EmployeeViewModel.CreateEmployee(model));
+                emp = _empService.Edit(DataMapper.CreateEmployee(model));
                 if (emp is null)
                 {
                     return NotFound();
@@ -101,7 +102,7 @@ namespace WebStore.Controllers
                 return View(model);
             }
 
-            _empService.Add(EmployeeViewModel.CreateEmployee(model));
+            _empService.Add(DataMapper.CreateEmployee(model));
 
             return RedirectToAction("Index");
         }
@@ -119,7 +120,7 @@ namespace WebStore.Controllers
                 return NotFound();
             }
 
-            return View(EmployeeViewModel.CreateEmployeeViewModel(emp));
+            return View(DataMapper.CreateEmployeeViewModel(emp));
         }
 
         [HttpPost]

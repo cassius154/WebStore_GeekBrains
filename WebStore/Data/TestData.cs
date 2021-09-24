@@ -61,14 +61,14 @@ namespace WebStore.Data
 
         public static IEnumerable<Product> Products { get; } = new[]
         {
-            new Product { Id = 1, Name = "Белое платье", Price = 225, ImageUrl = "product1.jpg", Order = 0, SectionId = 2, BrandId = 1 },
-            new Product { Id = 2, Name = "Розовое платье", Price = 725, ImageUrl = "product2.jpg", Order = 1, SectionId = 2, BrandId = 1 },
-            new Product { Id = 3, Name = "Красное платье", Price = 1017, ImageUrl = "product3.jpg", Order = 2, SectionId = 2, BrandId = 1 },
-            new Product { Id = 4, Name = "Джинсы", Price = 105, ImageUrl = "product4.jpg", Order = 3, SectionId = 1, BrandId = 1 },
-            new Product { Id = 5, Name = "Лёгкая майка", Price = 777, ImageUrl = "product5.jpg", Order = 4, SectionId = 1, BrandId = 2 },
-            new Product { Id = 6, Name = "Лёгкое голубое поло", Price = 18, ImageUrl = "product6.jpg", Order = 5, SectionId = 3, BrandId = 1 },
-            new Product { Id = 7, Name = "Платье белое", Price = 1025, ImageUrl = "product7.jpg", Order = 6, SectionId = 3, BrandId = 1 },
-            new Product { Id = 8, Name = "Костюм кролика", Price = 3412, ImageUrl = "product8.jpg", Order = 7, SectionId = 3, BrandId = 1 },
+            new Product { Id = 1, Name = "Белое платье", Price = 225, ImageUrl = "product1.jpg", Order = 0, SectionId = 24, BrandId = 1 },
+            new Product { Id = 2, Name = "Розовое платье", Price = 725, ImageUrl = "product2.jpg", Order = 1, SectionId = 24, BrandId = 1 },
+            new Product { Id = 3, Name = "Красное платье", Price = 1017, ImageUrl = "product3.jpg", Order = 2, SectionId = 24, BrandId = 1 },
+            new Product { Id = 4, Name = "Джинсы", Price = 105, ImageUrl = "product4.jpg", Order = 3, SectionId = 2, BrandId = 1 },
+            new Product { Id = 5, Name = "Лёгкая майка", Price = 777, ImageUrl = "product5.jpg", Order = 4, SectionId = 2, BrandId = 2 },
+            new Product { Id = 6, Name = "Лёгкое голубое поло", Price = 18, ImageUrl = "product6.jpg", Order = 5, SectionId = 26, BrandId = 1 },
+            new Product { Id = 7, Name = "Платье белое", Price = 1025, ImageUrl = "product7.jpg", Order = 6, SectionId = 26, BrandId = 1 },
+            new Product { Id = 8, Name = "Костюм кролика", Price = 3412, ImageUrl = "product8.jpg", Order = 7, SectionId = 26, BrandId = 1 },
             new Product { Id = 9, Name = "Красное китайское платье", Price = 5232, ImageUrl = "product9.jpg", Order = 8, SectionId = 4, BrandId = 1 },
             new Product { Id = 10, Name = "Женские джинсы", Price = 12, ImageUrl = "product10.jpg", Order = 9, SectionId = 4, BrandId = 3 },
             new Product { Id = 11, Name = "Джинсы женские", Price = 137, ImageUrl = "product11.jpg", Order = 10, SectionId = 4, BrandId = 3 },

@@ -2,10 +2,9 @@
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using WebStore.Models;
+using WebStore.DTO;
 using WebStore.Services.Interfaces;
 using WebStore.ViewModels;
-using WebStore.DTO;
 
 namespace WebStore.Controllers
 {

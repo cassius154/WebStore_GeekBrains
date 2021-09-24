@@ -40,6 +40,10 @@ namespace WebStore
                 app.UseDeveloperExceptionPage();
             }
 
+            //внутри ответа со статусным кодом должен быть адрес страницы, чтобы браузер на нее перешел
+            //этим и занимается UseStatusCodePages
+            //app.UseStatusCodePages();
+
             app.UseStaticFiles();
             app.UseRouting();
 
@@ -47,6 +51,7 @@ namespace WebStore
 
             //app.UseWelcomePage();
             //app.UseWelcomePage("/welcome");
+            //app.UseStatusCodePagesWithReExecute("/Home/Status/{0}");
 
             app.UseEndpoints(endpoints =>
             {

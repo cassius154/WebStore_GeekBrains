@@ -9,9 +9,9 @@ namespace WebStore.Components
     //[ViewComponent(Name = "BrandsVvv")]  - вместо наследования можно применить этот атрибут
     public class BrandsViewComponent : ViewComponent
     {
-        private readonly IProductData _prodData;
+        private readonly IProductService _prodData;
 
-        public BrandsViewComponent(IProductData prodData) => _prodData = prodData;
+        public BrandsViewComponent(IProductService prodData) => _prodData = prodData;
 
         //public async Task<IViewComponentResult> InvokeAsync() => View();  //можно и асинхронный 
 

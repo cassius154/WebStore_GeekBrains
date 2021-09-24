@@ -28,7 +28,7 @@ namespace WebStore
             //services.AddScoped<IEmployeeService, MemoryEmployeeService>();
             services.AddSingleton<IEmployeeService, MemoryEmployeeService>();
 
-            services.AddSingleton<IProductData, MemoryProductData>();
+            services.AddSingleton<IProductService, MemoryProductService>();
 
             services.AddControllersWithViews(opt => opt.Conventions.Add(new TestControllerConvention()))
                 .AddRazorRuntimeCompilation();

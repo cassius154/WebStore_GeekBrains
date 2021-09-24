@@ -28,6 +28,8 @@ namespace WebStore
             //services.AddScoped<IEmployeeService, MemoryEmployeeService>();
             services.AddSingleton<IEmployeeService, MemoryEmployeeService>();
 
+            services.AddSingleton<IProductData, MemoryProductData>();
+
             services.AddControllersWithViews(opt => opt.Conventions.Add(new TestControllerConvention()))
                 .AddRazorRuntimeCompilation();
         }

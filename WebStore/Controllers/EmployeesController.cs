@@ -33,7 +33,7 @@ namespace WebStore.Controllers
             }
 
             var emp = _empService.GetEmployee(id.Value);
-            if (emp is null)
+            if (emp is null)  //эквивалентно if (ReferenceEquals(emp, null))
             {
                 return NotFound();
             }

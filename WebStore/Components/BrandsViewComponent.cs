@@ -1,12 +1,30 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Microsoft.AspNetCore.Mvc;
+using WebStore.Services.Interfaces;
+using WebStore.ViewModels;
 
 namespace WebStore.Components
 {
     //[ViewComponent(Name = "BrandsVvv")]  - вместо наследования можно применить этот атрибут
     public class BrandsViewComponent : ViewComponent
     {
-        public IViewComponentResult Invoke() => View();
+        private readonly IProductData _prodData;
+
+        public BrandsViewComponent(IProductData prodData) => _prodData = prodData;
 
         //public async Task<IViewComponentResult> InvokeAsync() => View();  //можно и асинхронный 
+
+        public IViewComponentResult Invoke() => View(_getBrands());
+
+        private IEnumerable<BrandViewModel> _getBrands() => 
+            _prodData.GetBrands()
+                .OrderBy(b => b.Order)
+                .Select(b => new BrandViewModel
+                {
+                    Id = b.Id,
+                    Name = b.Name,
+                });
+
     }
 }

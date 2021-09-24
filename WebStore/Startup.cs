@@ -38,6 +38,7 @@ namespace WebStore
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                app.UseBrowserLink();
             }
 
             //внутри ответа со статусным кодом должен быть адрес страницы, чтобы браузер на нее перешел

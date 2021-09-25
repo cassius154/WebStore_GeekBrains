@@ -38,8 +38,22 @@ namespace WebStore.Services
 
         private int _getMaxId()
         {
-            var ret = _db.Employees.Max(e => e.Id);
-            return ret;
+            try
+            {
+                //IQueryable<Employee> ret = _db.Employees;
+                var ret = _db.Employees.Select(e => e.Id).DefaultIfEmpty(0); //.Max();
+                return ret.Max();  //вот это не работает
+                                   //{"The LINQ expression 'DbSet<Employee>().Select(e => e.Id)
+                                   //.DefaultIfEmpty(__p_0)' could not be translated.
+                                   //Either rewrite the query in a form that can be translated,
+                                   //or switch to client evaluation explicitly by inserting a call to
+                                   //'AsEnumerable', 'AsAsyncEnumerable', 'ToList', or 'ToListAsync'."}
+                                   //надо разбираться
+            }
+            catch
+            {
+                return 0;
+            }
         }
 
         private void _save()
@@ -55,7 +69,7 @@ namespace WebStore.Services
             }
 
             //emp.Id = (TestData.Employees.OrderByDescending(e => e.Id).FirstOrDefault()?.Id).GetValueOrDefault() + 1;
-            //var id = _getMaxId() + 1;
+            var id = _getMaxId() + 1;
 
             _db.Employees.Add(emp);
             _save();

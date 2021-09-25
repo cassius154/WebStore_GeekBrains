@@ -25,6 +25,7 @@ namespace WebStore.Data
         private void _initData(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Employee>().HasData(TestData.Employees);
+
             modelBuilder.Entity<Brand>().HasData(TestData.Brands);
             modelBuilder.Entity<Section>().HasData(TestData.Sections);
             modelBuilder.Entity<Product>().HasData(TestData.Products);

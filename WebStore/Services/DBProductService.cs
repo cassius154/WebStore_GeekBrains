@@ -1,7 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using WebStore.Data;
 using WebStore.Domain;
 using WebStore.Domain.Entities;
@@ -20,7 +19,7 @@ namespace WebStore.Services
 
         public IEnumerable<Brand> GetBrands()
         {
-            return _db.Brands.ToList();
+            return _db.Brands.AsNoTracking().ToList();
         }
 
         public IEnumerable<Product> GetProducts(ProductFilter filter = null)
@@ -36,12 +35,12 @@ namespace WebStore.Services
                 ret = ret.Where(p => p.SectionId == filter.SectionId);
             }
 
-            return ret.ToList();
+            return ret.AsNoTracking().ToList();
         }
 
         public IEnumerable<Section> GetSections()
         {
-            return _db.Sections.ToList();
+            return _db.Sections.AsNoTracking().ToList();
         }
     }
 }

@@ -17,7 +17,7 @@ namespace WebStore.Data
         {
             if (!optionsBuilder.IsConfigured)
             {
-                var connStr = "Server=(localdb)\\mssqllocaldb;Database=WebStore;Trusted_Connection=True;";
+                var connStr = "Server=(localdb)\\mssqllocaldb;Database=WebStore-AK-2020-09-27;Trusted_Connection=True;";
                 optionsBuilder.UseSqlServer(connStr);
             }
         }

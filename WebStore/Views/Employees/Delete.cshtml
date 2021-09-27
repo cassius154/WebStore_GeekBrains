@@ -1,0 +1,48 @@
+﻿@model WebStore.Models.Employee
+
+@{
+    ViewData["Title"] = "Удаление";
+}
+
+
+<div class="container">
+    <h3>Удалить сотрудника?</h3>
+    <div>
+        <h4>Сотрудник</h4>
+        <hr />
+        <dl class="row">
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.LastName)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.LastName)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.FirstName)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.FirstName)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Patronymic)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Patronymic)&nbsp;
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.BirthDate)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.BirthDate)
+            </dd>
+        </dl>
+
+        <form asp-action="Delete">
+            <p>
+                <input type="submit" value="Удалить" class="btn btn-danger" />
+                <a asp-action="Index" class="btn btn-default">Отмена</a>
+            </p>
+        </form>
+    </div>
+
+</div>

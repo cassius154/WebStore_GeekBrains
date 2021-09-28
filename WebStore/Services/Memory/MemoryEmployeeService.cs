@@ -6,7 +6,7 @@ using WebStore.Data;
 using WebStore.Domain.Entities;
 using WebStore.Services.Interfaces;
 
-namespace WebStore.Services
+namespace WebStore.Services.Memory
 {
     public class MemoryEmployeeService : IEmployeeService
     {

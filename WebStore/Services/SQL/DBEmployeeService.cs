@@ -7,7 +7,7 @@ using WebStore.DAL.Context;
 using WebStore.Domain.Entities;
 using WebStore.Services.Interfaces;
 
-namespace WebStore.Services
+namespace WebStore.Services.SQL
 {
     public class DBEmployeeService : IEmployeeService
     {
@@ -33,7 +33,7 @@ namespace WebStore.Services
                 ret = ret.Where(exp);
             }
 
-            return ret.AsNoTracking().ToList();
+            return ret.AsNoTracking(); //.ToList();
         }
 
         private int _getMaxId()

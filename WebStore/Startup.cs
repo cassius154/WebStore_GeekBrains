@@ -9,8 +9,8 @@ using WebStore.DAL.Context;
 using WebStore.Data;
 using WebStore.Infrastructure.Conventions;
 using WebStore.Infrastructure.Middleware;
-using WebStore.Services;
 using WebStore.Services.Interfaces;
+using WebStore.Services.SQL;
 
 namespace WebStore
 {

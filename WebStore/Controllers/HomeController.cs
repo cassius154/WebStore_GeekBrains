@@ -24,6 +24,13 @@ namespace WebStore.Controllers
 
         public IActionResult NotFoundPage() => View();
 
-        public IActionResult Status(string code) => Content($"Status code = {code}");
+        public IActionResult Status(string id)
+        {
+            switch (id)
+            {
+                default: return Content($"Status code === {id}");
+                case "404": return View("NotFoundPage");
+            }
+        }
     }
 }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
-using WebStore.Data;
+using WebStore.DAL.Context;
 using WebStore.Domain.Entities;
 using WebStore.Services.Interfaces;
 

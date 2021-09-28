@@ -16,8 +16,10 @@ namespace WebStore.DAL.Context
         //{
         //    if (!optionsBuilder.IsConfigured)
         //    {
+        //        теперь это уносится в Startup
         //        var connStr = "Server=(localdb)\\mssqllocaldb;Database=WebStore-AK-2020-09-27;Trusted_Connection=True;";
         //        optionsBuilder.UseSqlServer(connStr);
+        //        теперь это уносится в Startup
         //    }
         //}
 

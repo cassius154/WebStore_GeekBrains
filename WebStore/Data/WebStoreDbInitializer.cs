@@ -1,8 +1,10 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using WebStore.DAL.Context;
+using WebStore.DAL.Models;
 
 namespace WebStore.Data
 {
@@ -10,11 +12,13 @@ namespace WebStore.Data
     {
         private readonly WebStoreDbContext _db;
         private readonly ILogger<WebStoreDbInitializer> _logger;
+        private readonly UserManager<Employee> _userManager;
 
-        public WebStoreDbInitializer(WebStoreDbContext db, ILogger<WebStoreDbInitializer> logger)
+        public WebStoreDbInitializer(WebStoreDbContext db, ILogger<WebStoreDbInitializer> logger, UserManager<Employee> userManager)
         {
             _db = db;
             _logger = logger;
+            _userManager = userManager;
         }
 
         public async Task InitializeAsync()
@@ -37,6 +41,23 @@ namespace WebStore.Data
             }
 
             await _initProductsAsync();
+            await _initEmployeesAsync();
+        }
+
+
+        private async Task _initEmployeesAsync()
+        {
+            if (_userManager.Users.Any())
+            {
+                _logger.LogInformation("Инициализация БД нформацией о пользователях не требуется.");
+                return;
+            }
+
+            foreach (var e in TestData.Employees)
+            {
+                await _userManager.CreateAsync(e);
+                _logger.LogInformation($"Добавлен тестовый пользователь {e.UserName} {e.FirstName}");
+            }
         }
 
         private async Task _initProductsAsync()

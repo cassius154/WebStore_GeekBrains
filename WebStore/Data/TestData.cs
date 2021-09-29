@@ -9,9 +9,9 @@ namespace WebStore.Data
     {
         public static List<Employee> Employees { get; } = new()
         {
-            new Employee { UID = Guid.NewGuid(), LastName = "Иванов", FirstName = "Иван", Patronymic = "Иванович", BirthDate = new DateTime(1985, 03, 23) },
-            new Employee { UID = Guid.NewGuid(), LastName = "Петров", FirstName = "Петр", Patronymic = "Петрович", BirthDate = new DateTime(1995, 07, 27) },
-            new Employee { UID = Guid.NewGuid(), LastName = "Сидоров", FirstName = "Сидор", Patronymic = "Сидорович", BirthDate = new DateTime(2001, 11, 21) },
+            new Employee { UID = Guid.NewGuid(), UserName = "Ivanov", LastName = "Иванов", FirstName = "Иван", Patronymic = "Иванович", BirthDate = new DateTime(1985, 03, 23) },
+            new Employee { UID = Guid.NewGuid(), UserName = "Petrov", LastName = "Петров", FirstName = "Петр", Patronymic = "Петрович", BirthDate = new DateTime(1995, 07, 27) },
+            new Employee { UID = Guid.NewGuid(), UserName = "Sidorov", LastName = "Сидоров", FirstName = "Сидор", Patronymic = "Сидорович", BirthDate = new DateTime(2001, 11, 21) },
         };
 
         public static IEnumerable<Section> Sections { get; } = new[]

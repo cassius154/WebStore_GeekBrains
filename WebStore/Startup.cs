@@ -1,11 +1,13 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using WebStore.DAL.Context;
+using WebStore.DAL.Models;
 using WebStore.Data;
 using WebStore.Infrastructure.Conventions;
 using WebStore.Infrastructure.Middleware;
@@ -29,6 +31,9 @@ namespace WebStore
                 opt.UseSqlServer(Configuration.GetConnectionString("WebStoreSql")));
 
             services.AddTransient<WebStoreDbInitializer>();
+
+            services.AddIdentity<Employee, IdentityRole>()
+                .AddEntityFrameworkStores<WebStoreDbContext>();
 
             //services.AddTransient<IEmployeeService, MemoryEmployeeService>();
             //services.AddScoped<IEmployeeService, MemoryEmployeeService>();
@@ -57,6 +62,9 @@ namespace WebStore
 
             app.UseStaticFiles();
             app.UseRouting();
+
+            app.UseAuthentication();    // подключение аутентификации
+            app.UseAuthorization();
 
             app.UseMiddleware<TestMiddleware>();
 

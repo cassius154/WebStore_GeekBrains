@@ -8,7 +8,7 @@ namespace WebStore.ViewModels
     public class EmployeeViewModel : IValidatableObject  //кроме атрибутов можно реализовать IValidatableObject
     {
         [HiddenInput(DisplayValue = false)]
-        public int Id { get; set; }
+        public string Id { get; set; }
 
         [Display(Name = "Имя")]
         [Required(ErrorMessage = "Имя обязательно к заполнению")]

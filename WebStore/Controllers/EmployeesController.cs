@@ -25,14 +25,15 @@ namespace WebStore.Controllers
         public IActionResult Index() => View(_empService.GetEmployeeList().Select(e => DataMapper.CreateEmployeeViewModel(e)));
 
         //[Route("~/employees/info-{id}")]
-        public IActionResult Details(int? id)
+        //public IActionResult Details(int? id)
+        public IActionResult Details(string id)
         {
-            if (id is null || id.Value < 1)
+            if (string.IsNullOrEmpty(id))
             {
                 return BadRequest();
             }
 
-            var emp = _empService.GetEmployee(id.Value);
+            var emp = _empService.GetEmployee(id);
             if (emp is null)  //эквивалентно if (ReferenceEquals(emp, null))
             {
                 return NotFound();
@@ -41,18 +42,14 @@ namespace WebStore.Controllers
             return View(DataMapper.CreateEmployeeViewModel(emp));
         }
 
-        public IActionResult Edit(int? id)
+        public IActionResult Edit(string id)
         {
-            if (id is null)
+            if (string.IsNullOrEmpty(id))
             {
                 return View(new EmployeeViewModel());
             }
-            if (id.Value < 1)
-            {
-                return BadRequest();
-            }
 
-            var emp = _empService.GetEmployee(id.Value);
+            var emp = _empService.GetEmployee(id);
             if (emp is null)
             {
                 return NotFound();
@@ -71,7 +68,7 @@ namespace WebStore.Controllers
             }
 
             var emp = DataMapper.CreateEmployee(model);
-            if (model.Id == 0)
+            if (string.IsNullOrEmpty(model.Id))
             {
                _ = _empService.Add(DataMapper.CreateEmployee(model));
             }
@@ -106,14 +103,14 @@ namespace WebStore.Controllers
             return RedirectToAction("Index");
         }
 
-        public IActionResult Delete(int? id)
+        public IActionResult Delete(string id)
         {
-            if (id is null || id.Value < 1)
+            if (string.IsNullOrEmpty(id))
             {
                 return BadRequest();
             }
 
-            var emp = _empService.GetEmployee(id.Value);
+            var emp = _empService.GetEmployee(id);
             if (emp is null)
             {
                 return NotFound();
@@ -124,11 +121,11 @@ namespace WebStore.Controllers
 
         [HttpPost]
         [ActionName("Delete")]
-        public IActionResult DeleteConfirmed(int? id)
+        public IActionResult DeleteConfirmed(string id)
         {
             if (id != null)
             {
-                _empService.Delete(id.Value);
+                _empService.Delete(id);
             }
 
             return RedirectToAction("Index");

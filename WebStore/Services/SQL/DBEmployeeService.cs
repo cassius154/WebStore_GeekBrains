@@ -18,42 +18,46 @@ namespace WebStore.Services.SQL
             _db = db;
         }
 
-        public Employee GetEmployee(int id)
+        public Employee GetEmployee(string id)
         {
-            return _db.Employees.Find(id);
+            return null;
+            //return _db.Employees.Find(id);
         }
 
         public IEnumerable<Employee> GetEmployeeList(Func<Employee, bool> predicate = null)
         {
-            IQueryable<Employee> ret = _db.Employees;
-            if (predicate is not null)
-            {
-                Expression<Func<Employee, bool>> exp = 
-                    Expression.Lambda<Func<Employee, bool>>(Expression.Call(predicate.Method));
-                ret = ret.Where(exp);
-            }
+            return new List<Employee>();
+            //IQueryable<Employee> ret = _db.Employees;
+            //if (predicate is not null)
+            //{
+            //    Expression<Func<Employee, bool>> exp = 
+            //        Expression.Lambda<Func<Employee, bool>>(Expression.Call(predicate.Method));
+            //    ret = ret.Where(exp);
+            //}
 
-            return ret.AsNoTracking(); //.ToList();
+            //return ret.AsNoTracking(); //.ToList();
         }
 
         private int _getMaxId()
         {
-            try
-            {
-                //IQueryable<Employee> ret = _db.Employees;
-                var ret = _db.Employees.Select(e => e.Id).DefaultIfEmpty(0); //.Max();
-                return ret.Max();  //вот это не работает
-                                   //{"The LINQ expression 'DbSet<Employee>().Select(e => e.Id)
-                                   //.DefaultIfEmpty(__p_0)' could not be translated.
-                                   //Either rewrite the query in a form that can be translated,
-                                   //or switch to client evaluation explicitly by inserting a call to
-                                   //'AsEnumerable', 'AsAsyncEnumerable', 'ToList', or 'ToListAsync'."}
-                                   //надо разбираться
-            }
-            catch
-            {
-                return 0;
-            }
+            return 0;
+
+            //try
+            //{
+            //    //IQueryable<Employee> ret = _db.Employees;
+            //    var ret = _db.Employees.Select(e => e.Id).DefaultIfEmpty(0); //.Max();
+            //    return ret.Max();  //вот это не работает
+            //                       //{"The LINQ expression 'DbSet<Employee>().Select(e => e.Id)
+            //                       //.DefaultIfEmpty(__p_0)' could not be translated.
+            //                       //Either rewrite the query in a form that can be translated,
+            //                       //or switch to client evaluation explicitly by inserting a call to
+            //                       //'AsEnumerable', 'AsAsyncEnumerable', 'ToList', or 'ToListAsync'."}
+            //                       //надо разбираться
+            //}
+            //catch
+            //{
+            //    return 0;
+            //}
         }
 
         private void _save()
@@ -69,21 +73,23 @@ namespace WebStore.Services.SQL
             }
 
             //emp.Id = (TestData.Employees.OrderByDescending(e => e.Id).FirstOrDefault()?.Id).GetValueOrDefault() + 1;
-            var id = _getMaxId() + 1;
+            //var id = _getMaxId() + 1;
 
-            _db.Employees.Add(emp);
-            _save();
+            //_db.Employees.Add(emp);
+            //_save();
 
             return emp;
         }
 
-        public bool Delete(int id)
+        public bool Delete(string id)
         {
+            return true;
+
             var e = GetEmployee(id);
             if (e is not null)
             {
-                _db.Employees.Remove(e);
-                _save();
+                //_db.Employees.Remove(e);
+                //_save();
 
                 return true;
             }
@@ -93,6 +99,8 @@ namespace WebStore.Services.SQL
 
         public Employee Edit(Employee emp)
         {
+            return emp;
+
             if (emp is null)
             {
                 throw new ArgumentNullException(nameof(emp));

@@ -12,19 +12,18 @@ namespace WebStore.Services.Memory
     {
 
         private readonly ILogger<MemoryEmployeeService> _logger;
-        private int _maxId;
 
         public MemoryEmployeeService(ILogger<MemoryEmployeeService> logger)
         {
             _logger = logger;
-            _maxId = _getMaxId();
+            //_maxId = _getMaxId();
             //_maxId = _getMaxIntValue(TestData.Employees, e => e.Id);
         }
 
-        private static int _getMaxId()
-        {
-            return TestData.Employees.Any() ? TestData.Employees.Max(e => e.Id) : 0;
-        }
+        //private static int _getMaxId()
+        //{
+        //    return TestData.Employees.Any() ? TestData.Employees.Max(e => e.Id) : 0;
+        //}
 
         private static int _getMaxIntValue<T>(IEnumerable<T> list, Func<T, int> selector)
         {
@@ -42,7 +41,7 @@ namespace WebStore.Services.Memory
             return ret;
         }
 
-        public Employee GetEmployee(int id) => TestData.Employees.SingleOrDefault(e => e.Id == id);
+        public Employee GetEmployee(string id) => TestData.Employees.SingleOrDefault(e => e.Id == id);
 
         public Employee Add(Employee emp)
         {
@@ -58,7 +57,8 @@ namespace WebStore.Services.Memory
 
             //emp.Id = (TestData.Employees.OrderByDescending(e => e.Id).FirstOrDefault()?.Id).GetValueOrDefault() + 1;
             //emp.Id = _getMaxId() + 1;
-            emp.Id = ++_maxId;
+            //emp.Id = ++_maxId;
+            emp.UID = Guid.NewGuid();
 
             TestData.Employees.Add(emp);
             return emp;
@@ -88,7 +88,7 @@ namespace WebStore.Services.Memory
             return e;
         }
 
-        public bool Delete(int id)
+        public bool Delete(string id)
         {
             var e = GetEmployee(id);
             if (e != null)

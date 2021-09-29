@@ -8,13 +8,13 @@ namespace WebStore.Services.Interfaces
     {
         IEnumerable<Employee> GetEmployeeList(Func<Employee, bool> predicate = null);
 
-        Employee GetEmployee(int id);
+        Employee GetEmployee(string id);
 
         Employee Add(Employee emp);
         
         Employee Edit(Employee emp);
 
-        bool Delete(int id);
+        bool Delete(string id);
 
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using WebStore.DAL.Models;
 using WebStore.Domain.Entities;
 
 namespace WebStore.DAL.Context

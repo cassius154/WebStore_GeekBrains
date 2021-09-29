@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace WebStore.Domain.Entities
+namespace WebStore.DAL.Models
 {
     public class Employee
     {

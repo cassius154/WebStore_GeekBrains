@@ -1,9 +1,9 @@
-﻿using System;
+﻿using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.Extensions.Logging;
+using WebStore.DAL.Models;
 using WebStore.Data;
-using WebStore.Domain.Entities;
 using WebStore.Services.Interfaces;
 
 namespace WebStore.Services.Memory

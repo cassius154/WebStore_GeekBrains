@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using WebStore.Domain.Entities;
+using WebStore.DAL.Models;
 
 namespace WebStore.Services.Interfaces
 {

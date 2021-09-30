@@ -1,32 +1,36 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
-using WebStore.Data;
+using Microsoft.Extensions.Logging;
 using WebStore.Models;
-using WebStore.Services;
+using WebStore.Services.Interfaces;
+using WebStore.ViewModels;
+using WebStore.DTO;
 
 namespace WebStore.Controllers
 {
+    //[Route("Employees/[action]/{id?}")]
+    //[Route("Staff/[action]/{id?}")]
     public class EmployeesController : Controller
     {
-        //private readonly IEnumerable<Employee> _employees;
+        private readonly IEmployeeService _empService;
+        private readonly ILogger<EmployeesController> _logger;
 
-        private readonly EmployeeService _empService;
-
-        public EmployeesController()
+        public EmployeesController(IEmployeeService empService, ILogger<EmployeesController> logger)
         {
-            //_employees = TestData.Employees;
-            _empService = new EmployeeService();
+            _logger = logger;
+            _empService = empService;
         }
 
-        public IActionResult Index() => View(_empService.GetEmployeeList());
+        //[Route("~/employees/all")]
+        public IActionResult Index() => View(_empService.GetEmployeeList().Select(e => DataMapper.CreateEmployeeViewModel(e)));
 
+        //[Route("~/employees/info-{id}")]
         public IActionResult Details(int? id)
         {
-            if (id is null)
+            if (id is null || id.Value < 1)
             {
-                return NotFound();
+                return BadRequest();
             }
 
             var emp = _empService.GetEmployee(id.Value);
@@ -35,14 +39,18 @@ namespace WebStore.Controllers
                 return NotFound();
             }
 
-            return View(emp);
+            return View(DataMapper.CreateEmployeeViewModel(emp));
         }
 
         public IActionResult Edit(int? id)
         {
             if (id is null)
             {
-                return NotFound();
+                return View(new EmployeeViewModel());
+            }
+            if (id.Value < 1)
+            {
+                return BadRequest();
             }
 
             var emp = _empService.GetEmployee(id.Value);
@@ -51,11 +59,11 @@ namespace WebStore.Controllers
                 return NotFound();
             }
 
-            return View(emp);
+            return View(DataMapper.CreateEmployeeViewModel(emp));
         }
 
         [HttpPost]
-        public IActionResult Edit(Employee model)
+        public IActionResult Edit(EmployeeViewModel model)
         {
             _validateModel(model);
             if (!ModelState.IsValid)
@@ -63,19 +71,30 @@ namespace WebStore.Controllers
                 return View(model);
             }
 
-            var emp = _empService.Edit(model);
-            if (emp is null)
+            var emp = DataMapper.CreateEmployee(model);
+            if (model.Id == 0)
             {
-                return NotFound();
+               _ = _empService.Add(DataMapper.CreateEmployee(model));
+            }
+            else
+            {
+                emp = _empService.Edit(DataMapper.CreateEmployee(model));
+                if (emp is null)
+                {
+                    return NotFound();
+                }
             }
 
             return RedirectToAction("Index");
         }
 
-        public IActionResult Create() => View();
+        public IActionResult Create1() => View();
+
+        public IActionResult Create2() => View("Edit", new EmployeeViewModel());
+
 
         [HttpPost]
-        public IActionResult Create(Employee model)
+        public IActionResult Create1(EmployeeViewModel model)
         {
             _validateModel(model);
             if (!ModelState.IsValid)
@@ -83,16 +102,16 @@ namespace WebStore.Controllers
                 return View(model);
             }
 
-            _empService.Add(model);
+            _empService.Add(DataMapper.CreateEmployee(model));
 
             return RedirectToAction("Index");
         }
 
         public IActionResult Delete(int? id)
         {
-            if (id is null)
+            if (id is null || id.Value < 1)
             {
-                return NotFound();
+                return BadRequest();
             }
 
             var emp = _empService.GetEmployee(id.Value);
@@ -101,7 +120,7 @@ namespace WebStore.Controllers
                 return NotFound();
             }
 
-            return View(emp);
+            return View(DataMapper.CreateEmployeeViewModel(emp));
         }
 
         [HttpPost]
@@ -112,15 +131,25 @@ namespace WebStore.Controllers
             {
                 _empService.Delete(id.Value);
             }
+
             return RedirectToAction("Index");
         }
 
 
-        private void _validateModel(Employee model)
+        private void _validateModel(EmployeeViewModel model)
         {
-            if (model.BirthDate.Date > DateTime.Today)
+            if (model.BirthDate.Value.Date > DateTime.Today)
             {
                 ModelState.AddModelError("BirthDate", "Дата рождения больше текущей");
+            }
+            if (model.Age > 150)
+            {
+                ModelState.AddModelError("BirthDate", "Проверьте внимательно год рождения!");
+            }
+
+            if ((model.FirstName ?? "").Any(char.IsDigit) || (model.LastName ?? "").Any(char.IsDigit) || (model.Patronymic ?? "").Any(char.IsDigit))
+            {
+                ModelState.AddModelError("", "В именах не должно быть цифр");
             }
         }
     }

@@ -1,14 +1,16 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using WebStore.DAL.Context;
 using WebStore.Data;
 using WebStore.Infrastructure.Conventions;
 using WebStore.Infrastructure.Middleware;
-using WebStore.Services;
 using WebStore.Services.Interfaces;
+using WebStore.Services.SQL;
 
 namespace WebStore
 {
@@ -21,11 +23,12 @@ namespace WebStore
             Configuration = configuration;
         }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
-        // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<WebStoreDbContext>();
+            services.AddDbContext<WebStoreDbContext>(opt => 
+                opt.UseSqlServer(Configuration.GetConnectionString("WebStoreSql")));
+
+            services.AddTransient<WebStoreDbInitializer>();
 
             //services.AddTransient<IEmployeeService, MemoryEmployeeService>();
             //services.AddScoped<IEmployeeService, MemoryEmployeeService>();
@@ -39,7 +42,6 @@ namespace WebStore
                 .AddRazorRuntimeCompilation();
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
@@ -51,6 +53,7 @@ namespace WebStore
             //внутри ответа со статусным кодом должен быть адрес страницы, чтобы браузер на нее перешел
             //этим и занимается UseStatusCodePages
             //app.UseStatusCodePages();
+            app.UseStatusCodePagesWithRedirects("~/Home/Status/{0}");
 
             app.UseStaticFiles();
             app.UseRouting();
@@ -59,6 +62,7 @@ namespace WebStore
 
             //app.UseWelcomePage();
             //app.UseWelcomePage("/welcome");
+            
             //app.UseStatusCodePagesWithReExecute("/Home/Status/{0}");
 
             app.UseEndpoints(endpoints =>

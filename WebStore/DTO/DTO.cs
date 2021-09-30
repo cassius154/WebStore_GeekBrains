@@ -1,5 +1,4 @@
 ﻿using WebStore.Domain.Entities;
-using WebStore.Models;
 using WebStore.ViewModels;
 
 namespace WebStore.DTO

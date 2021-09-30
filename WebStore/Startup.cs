@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using WebStore.Data;
 using WebStore.Infrastructure.Conventions;
 using WebStore.Infrastructure.Middleware;
 using WebStore.Services;
@@ -24,9 +25,15 @@ namespace WebStore
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContext<WebStoreDbContext>();
+
             //services.AddTransient<IEmployeeService, MemoryEmployeeService>();
             //services.AddScoped<IEmployeeService, MemoryEmployeeService>();
-            services.AddSingleton<IEmployeeService, MemoryEmployeeService>();
+            //services.AddSingleton<IEmployeeService, MemoryEmployeeService>();
+            services.AddScoped<IEmployeeService, DBEmployeeService>();
+
+            //services.AddScoped<IProductService, MemoryProductService>();
+            services.AddScoped<IProductService, DBProductService>();
 
             services.AddControllersWithViews(opt => opt.Conventions.Add(new TestControllerConvention()))
                 .AddRazorRuntimeCompilation();
@@ -38,7 +45,12 @@ namespace WebStore
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                app.UseBrowserLink();
             }
+
+            //внутри ответа со статусным кодом должен быть адрес страницы, чтобы браузер на нее перешел
+            //этим и занимается UseStatusCodePages
+            //app.UseStatusCodePages();
 
             app.UseStaticFiles();
             app.UseRouting();
@@ -47,6 +59,7 @@ namespace WebStore
 
             //app.UseWelcomePage();
             //app.UseWelcomePage("/welcome");
+            //app.UseStatusCodePagesWithReExecute("/Home/Status/{0}");
 
             app.UseEndpoints(endpoints =>
             {

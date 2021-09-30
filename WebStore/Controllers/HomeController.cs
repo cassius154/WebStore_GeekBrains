@@ -23,5 +23,7 @@ namespace WebStore.Controllers
         public IActionResult Dreams() => View();
 
         public IActionResult NotFoundPage() => View();
+
+        public IActionResult Status(string code) => Content($"Status code = {code}");
     }
 }

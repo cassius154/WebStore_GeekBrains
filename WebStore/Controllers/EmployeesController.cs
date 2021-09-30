@@ -2,10 +2,9 @@
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using WebStore.Models;
+using WebStore.DTO;
 using WebStore.Services.Interfaces;
 using WebStore.ViewModels;
-using WebStore.DTO;
 
 namespace WebStore.Controllers
 {
@@ -34,7 +33,7 @@ namespace WebStore.Controllers
             }
 
             var emp = _empService.GetEmployee(id.Value);
-            if (emp is null)
+            if (emp is null)  //эквивалентно if (ReferenceEquals(emp, null))
             {
                 return NotFound();
             }

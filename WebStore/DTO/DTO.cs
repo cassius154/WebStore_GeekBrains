@@ -1,4 +1,5 @@
-﻿using WebStore.Models;
+﻿using WebStore.Domain.Entities;
+using WebStore.Models;
 using WebStore.ViewModels;
 
 namespace WebStore.DTO
@@ -17,15 +18,25 @@ namespace WebStore.DTO
             };
         }
 
-        public static EmployeeViewModel CreateEmployeeViewModel(Employee employee)
+        public static EmployeeViewModel CreateEmployeeViewModel(Employee entity)
         {
             return new EmployeeViewModel
             {
-                Id = employee.Id,
-                FirstName = employee.FirstName,
-                LastName = employee.LastName,
-                Patronymic = employee.Patronymic,
-                BirthDate = employee.BirthDate,
+                Id = entity.Id,
+                FirstName = entity.FirstName,
+                LastName = entity.LastName,
+                Patronymic = entity.Patronymic,
+                BirthDate = entity.BirthDate,
+            };
+        }
+
+        public static SectionViewModel CreateSectionViewModel(Section entity)
+        {
+            return new SectionViewModel
+            {
+                Id = entity.Id,
+                Name = entity.Name,
+                Order = entity.Order,
             };
         }
     }

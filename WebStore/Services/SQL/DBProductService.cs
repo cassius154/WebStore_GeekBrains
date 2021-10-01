@@ -10,7 +10,7 @@ namespace WebStore.Services.SQL
 {
     public class DBProductService : IProductService
     {
-        private WebStoreDbContext _db;
+        private readonly WebStoreDbContext _db;
 
         public DBProductService(WebStoreDbContext db)
         {

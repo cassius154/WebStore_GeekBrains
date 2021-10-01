@@ -22,7 +22,7 @@ namespace WebStore.Infrastructure.Middleware
             
             //предобработка
 
-            var task = _next(context);  //pfgecr следующего узла конвеера
+            var task = _next(context);  //запуск следующего узла конвеера
 
             //параллельная обработка
 

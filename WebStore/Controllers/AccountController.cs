@@ -52,11 +52,46 @@ namespace WebStore.Controllers
         }
         #endregion Register
 
-        public IActionResult Login() => View();
+        #region Login
+        public IActionResult Login(string returnUrl) => View(new LoginViewModel { ReturnUrl = returnUrl });
+
+        [HttpPost, ValidateAntiForgeryToken]
+        public async Task<IActionResult> Login(LoginViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var loginResult = await _signInManager.PasswordSignInAsync(
+                model.UserName,
+                model.Password,
+                model.RememberMe,
+                false);
+
+            if (loginResult.Succeeded)
+            {
+                //return Redirect(model.ReturnUrl);  //небезопасно! могут подсунуть левый Url и куки утекут на сторону
+
+                //можно так
+                //if (Url.IsLocalUrl(model.ReturnUrl))
+                //{
+                //    return Redirect(model.ReturnUrl);
+                //}
+                //return RedirectToAction("Index", "Home");
+
+                //а можно так
+                return LocalRedirect(model.ReturnUrl ?? "/");
+            }
+
+            ModelState.AddModelError("", "Ошибка ввода логина или пароля");
+            return View(model);
+        }
+        #endregion Login
 
         public async Task<IActionResult> Logout()
         {
-            
+            await _signInManager.SignOutAsync();
             return RedirectToAction("Index", "Home");
         }
 

@@ -45,7 +45,7 @@ namespace WebStore
                 opt.Password.RequireUppercase = false;
                 opt.Password.RequireNonAlphanumeric = false;
                 opt.Password.RequiredLength = 3;
-                opt.Password.RequiredUniqueChars = 1;
+                opt.Password.RequiredUniqueChars = 3;
 #endif
                 opt.User.RequireUniqueEmail = false;
                 opt.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";

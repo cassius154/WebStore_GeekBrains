@@ -53,18 +53,18 @@ namespace WebStore.ViewModels
         {
             return new[] { ValidationResult.Success };
 
-            switch (validationContext.MemberName)
-            {
-                case nameof(Age):
-                    if (Age < 15 && Age > 80)
-                    {
-                        return new[] { new ValidationResult("Странный возраст", new[] { nameof(Age) }) };
-                    }
-                    return new[] { ValidationResult.Success };
+            //switch (validationContext.MemberName)
+            //{
+            //    case nameof(Age):
+            //        if (Age < 15 && Age > 80)
+            //        {
+            //            return new[] { new ValidationResult("Странный возраст", new[] { nameof(Age) }) };
+            //        }
+            //        return new[] { ValidationResult.Success };
 
-                default: return new[] { ValidationResult.Success };
+            //    default: return new[] { ValidationResult.Success };
 
-            }
+            //}
         }
     }
 }

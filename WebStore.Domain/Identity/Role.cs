@@ -1,8 +1,9 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using System;
+using Microsoft.AspNetCore.Identity;
 
 namespace WebStore.Domain.Identity
 {
-    public class Role : IdentityRole
+    public class Role : IdentityRole<Guid>
     {
         public const string Administrators = "Administrators";
 

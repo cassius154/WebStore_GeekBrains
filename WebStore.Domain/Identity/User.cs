@@ -1,8 +1,9 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using System;
+using Microsoft.AspNetCore.Identity;
 
 namespace WebStore.Domain.Identity
 {
-    public class User : IdentityUser
+    public class User : IdentityUser<Guid>
     {
         public const string AdmLogin = "Admin";
 

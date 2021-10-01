@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -47,34 +48,62 @@ namespace WebStore.Data
                 return;
             }
 
+            var timer = Stopwatch.StartNew();
+
+            //связываем данные логически - т.е. вместо ссылок вида xxxId прописываем прямиком сущности
+            var dictSections = TestData.Sections.ToDictionary(s => s.Id);
+            var dictBrands = TestData.Brands.ToDictionary(b => b.Id);
+
+            //проставляем секциям целиком parent-ы вместо ParentId 
+            foreach(var childSection in TestData.Sections.Where(s => s.ParentId is not null))
+            {
+                childSection.Parent = dictSections[(int)childSection.ParentId!];  //! - это чтобы при какой-то включенной опции не выдавало предупреждений о непроверке на null
+            }
+
+            foreach (var product in TestData.Products)
+            {
+                product.Section = dictSections[product.SectionId];
+                //if (product.BrandId is { } brandId)  //новая форма - к ней привыкнуть надо. Из плюсов - не нужно .Value или приведение к (int) - тут сразу дается полноценный int
+                //{
+                //    product.Brand = dictBrands[brandId];
+                //}
+                if (product.BrandId is not null)
+                {
+                    product.Brand = dictBrands[product.BrandId.Value];
+                }
+
+                //чистим ключи - БД сама расставит их как надо, из атрибута [DatabaseGenerated(DatabaseGeneratedOption.Identity)] и внешние из логических связей
+                product.Id = 0;
+                product.SectionId = 0;
+                product.BrandId = null;
+            }
+
+            //чистим ключи у секций
+            foreach (var section in TestData.Sections)
+            {
+                section.Id = 0;  //по-моему это лишнее - тут сработает [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+                section.ParentId = null;
+            }
+
+            //чистим ключи у брендов
+            foreach (var brand in TestData.Brands)
+            {
+                brand.Id = 0;  //по-моему это лишнее - тут сработает [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+            }
+
+            _logger.LogInformation("Добавление каталога...");
             //await using (var tx = await _db.Database.BeginTransactionAsync())
             await using (await _db.Database.BeginTransactionAsync())
             {
-                _logger.LogInformation("Добавление секций...");
-                await _db.Sections.AddRangeAsync(TestData.Sections);
-                //отключаем генерацию ID на сервере - вставляем свои из TestData
-                await _db.Database.ExecuteSqlRawAsync("SET IDENTITY_INSERT [dbo].[Sections] ON");
-                await _db.SaveChangesAsync();
-                await _db.Database.ExecuteSqlRawAsync("SET IDENTITY_INSERT [dbo].[Sections] OFF");
-                _logger.LogInformation("Добавление секций выполнено успешно");
-
-                _logger.LogInformation("Добавление брендов...");
                 await _db.Brands.AddRangeAsync(TestData.Brands);
-                await _db.Database.ExecuteSqlRawAsync("SET IDENTITY_INSERT [dbo].[Brands] ON");
-                await _db.SaveChangesAsync();
-                await _db.Database.ExecuteSqlRawAsync("SET IDENTITY_INSERT [dbo].[Brands] OFF");
-                _logger.LogInformation("Добавление брендов выполнено успешно");
-
-                _logger.LogInformation("Добавление товаров...");
+                await _db.Sections.AddRangeAsync(TestData.Sections);
                 await _db.Products.AddRangeAsync(TestData.Products);
-                await _db.Database.ExecuteSqlRawAsync("SET IDENTITY_INSERT [dbo].[Products] ON");
-                await _db.SaveChangesAsync();
-                await _db.Database.ExecuteSqlRawAsync("SET IDENTITY_INSERT [dbo].[Products] OFF");
-                _logger.LogInformation("Добавление товаров выполнено успешно");
 
+                await _db.SaveChangesAsync();
                 //await tx.CommitAsync();
                 await _db.Database.CommitTransactionAsync();
             }
+            _logger.LogInformation($"Добавление каталога выполнено успешно за {timer/*ElapsedMilliseconds*/.Elapsed.TotalMilliseconds} мс");
         }
     }
 }

@@ -104,6 +104,9 @@ namespace WebStore
             app.UseStaticFiles();
             app.UseRouting();
 
+            app.UseAuthentication();
+            app.UseAuthorization();
+
             app.UseMiddleware<TestMiddleware>();
 
             //app.UseWelcomePage();

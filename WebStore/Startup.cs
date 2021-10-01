@@ -10,6 +10,7 @@ using WebStore.Data;
 using WebStore.Infrastructure.Conventions;
 using WebStore.Infrastructure.Middleware;
 using WebStore.Services.Interfaces;
+using WebStore.Services.Memory;
 using WebStore.Services.SQL;
 
 namespace WebStore
@@ -32,8 +33,8 @@ namespace WebStore
 
             //services.AddTransient<IEmployeeService, MemoryEmployeeService>();
             //services.AddScoped<IEmployeeService, MemoryEmployeeService>();
-            //services.AddSingleton<IEmployeeService, MemoryEmployeeService>();
-            services.AddScoped<IEmployeeService, DBEmployeeService>();
+            services.AddSingleton<IEmployeeService, MemoryEmployeeService>();
+            //services.AddScoped<IEmployeeService, DBEmployeeService>();
 
             //services.AddScoped<IProductService, MemoryProductService>();
             services.AddScoped<IProductService, DBProductService>();

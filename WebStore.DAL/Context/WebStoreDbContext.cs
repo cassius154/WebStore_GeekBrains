@@ -40,7 +40,7 @@ namespace WebStore.DAL.Context
         //}
 
 
-        public DbSet<Employee> Employees { get; set; }
+        //public DbSet<Employee> Employees { get; set; }
 
         public DbSet<Brand> Brands { get; set; }
 

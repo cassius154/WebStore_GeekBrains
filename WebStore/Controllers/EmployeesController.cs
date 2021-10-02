@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using WebStore.DTO;
@@ -10,6 +11,7 @@ namespace WebStore.Controllers
 {
     //[Route("Employees/[action]/{id?}")]
     //[Route("Staff/[action]/{id?}")]
+    [Authorize(Roles = "Administrators")]
     public class EmployeesController : Controller
     {
         private readonly IEmployeeService _empService;

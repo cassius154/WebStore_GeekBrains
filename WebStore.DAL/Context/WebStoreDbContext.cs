@@ -1,9 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using WebStore.Domain.Entities;
+using WebStore.Domain.Identity;
 
 namespace WebStore.DAL.Context
 {
-    public class WebStoreDbContext : DbContext
+    public class WebStoreDbContext : IdentityDbContext<User, Role, Guid>
     {
 
         public WebStoreDbContext(DbContextOptions<WebStoreDbContext> options)
@@ -40,7 +43,7 @@ namespace WebStore.DAL.Context
         //}
 
 
-        public DbSet<Employee> Employees { get; set; }
+        //public DbSet<Employee> Employees { get; set; }
 
         public DbSet<Brand> Brands { get; set; }
 

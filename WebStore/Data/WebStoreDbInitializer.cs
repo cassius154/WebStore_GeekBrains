@@ -1,8 +1,12 @@
-﻿using System.Linq;
+﻿using System.Diagnostics;
+using System.IO.Pipelines;
+using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using WebStore.DAL.Context;
+using WebStore.Domain.Identity;
 
 namespace WebStore.Data
 {
@@ -10,11 +14,18 @@ namespace WebStore.Data
     {
         private readonly WebStoreDbContext _db;
         private readonly ILogger<WebStoreDbInitializer> _logger;
+        private readonly UserManager<User> _userManager;
+        private readonly RoleManager<Role> _roleManager;
 
-        public WebStoreDbInitializer(WebStoreDbContext db, ILogger<WebStoreDbInitializer> logger)
+        public WebStoreDbInitializer(WebStoreDbContext db,
+            ILogger<WebStoreDbInitializer> logger,
+            UserManager<User> userManager,
+            RoleManager<Role> roleManager)
         {
             _db = db;
             _logger = logger;
+            _userManager = userManager;
+            _roleManager = roleManager;
         }
 
         public async Task InitializeAsync()
@@ -37,6 +48,8 @@ namespace WebStore.Data
             }
 
             await _initProductsAsync();
+
+            await _initAdministrators();
         }
 
         private async Task _initProductsAsync()
@@ -47,34 +60,132 @@ namespace WebStore.Data
                 return;
             }
 
+            var timer = Stopwatch.StartNew();
+
+            //связываем данные логически - т.е. вместо ссылок вида xxxId прописываем прямиком сущности
+            var dictSections = TestData.Sections.ToDictionary(s => s.Id);
+            var dictBrands = TestData.Brands.ToDictionary(b => b.Id);
+
+            //проставляем секциям целиком parent-ы вместо ParentId 
+            foreach (var childSection in TestData.Sections.Where(s => s.ParentId is not null))
+            {
+                childSection.Parent = dictSections[(int)childSection.ParentId!];  //! - это чтобы при какой-то включенной опции не выдавало предупреждений о непроверке на null
+            }
+
+            foreach (var product in TestData.Products)
+            {
+                product.Section = dictSections[product.SectionId];
+                //if (product.BrandId is { } brandId)  //новая форма - к ней привыкнуть надо. Из плюсов - не нужно .Value или приведение к (int) - тут сразу дается полноценный int
+                //{
+                //    product.Brand = dictBrands[brandId];
+                //}
+                if (product.BrandId is not null)
+                {
+                    product.Brand = dictBrands[product.BrandId.Value];
+                }
+
+                //чистим ключи - БД сама расставит их как надо, из атрибута [DatabaseGenerated(DatabaseGeneratedOption.Identity)] и внешние из логических связей
+                product.Id = 0;
+                product.SectionId = 0;
+                product.BrandId = null;
+            }
+
+            //чистим ключи у секций
+            foreach (var section in TestData.Sections)
+            {
+                section.Id = 0;  //по-моему это лишнее - тут сработает [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+                section.ParentId = null;
+            }
+
+            //чистим ключи у брендов
+            foreach (var brand in TestData.Brands)
+            {
+                brand.Id = 0;  //по-моему это лишнее - тут сработает [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+            }
+
+            _logger.LogInformation("Добавление каталога...");
             //await using (var tx = await _db.Database.BeginTransactionAsync())
             await using (await _db.Database.BeginTransactionAsync())
             {
-                _logger.LogInformation("Добавление секций...");
-                await _db.Sections.AddRangeAsync(TestData.Sections);
-                //отключаем генерацию ID на сервере - вставляем свои из TestData
-                await _db.Database.ExecuteSqlRawAsync("SET IDENTITY_INSERT [dbo].[Sections] ON");
-                await _db.SaveChangesAsync();
-                await _db.Database.ExecuteSqlRawAsync("SET IDENTITY_INSERT [dbo].[Sections] OFF");
-                _logger.LogInformation("Добавление секций выполнено успешно");
-
-                _logger.LogInformation("Добавление брендов...");
                 await _db.Brands.AddRangeAsync(TestData.Brands);
-                await _db.Database.ExecuteSqlRawAsync("SET IDENTITY_INSERT [dbo].[Brands] ON");
-                await _db.SaveChangesAsync();
-                await _db.Database.ExecuteSqlRawAsync("SET IDENTITY_INSERT [dbo].[Brands] OFF");
-                _logger.LogInformation("Добавление брендов выполнено успешно");
-
-                _logger.LogInformation("Добавление товаров...");
+                await _db.Sections.AddRangeAsync(TestData.Sections);
                 await _db.Products.AddRangeAsync(TestData.Products);
-                await _db.Database.ExecuteSqlRawAsync("SET IDENTITY_INSERT [dbo].[Products] ON");
-                await _db.SaveChangesAsync();
-                await _db.Database.ExecuteSqlRawAsync("SET IDENTITY_INSERT [dbo].[Products] OFF");
-                _logger.LogInformation("Добавление товаров выполнено успешно");
 
+                await _db.SaveChangesAsync();
                 //await tx.CommitAsync();
                 await _db.Database.CommitTransactionAsync();
             }
+            _logger.LogInformation($"Добавление каталога выполнено успешно за {timer/*ElapsedMilliseconds*/.Elapsed.TotalMilliseconds} мс");
         }
+
+        private async Task _initAdministrators()
+        {
+            IdentityResult identityResult;
+            User user = null;
+
+            var ok = await _roleManager.RoleExistsAsync(Role.Administrators);
+
+            if (!ok)
+            {
+                var role = new Role
+                {
+                    Name = Role.Administrators,
+                };
+
+                _logger.LogInformation("Создание роли администратора...");
+                identityResult = await _roleManager.CreateAsync(role);
+
+                ok = _handleResult(identityResult,
+                    "Создание роли администратора выполнено успешно.",
+                    "Ошибка создания роли администратора: {0}"
+                );
+            }
+
+            if (ok)
+            {
+                user = await _userManager.FindByNameAsync(User.AdmLogin);
+                if (user is null)
+                {
+                    user = new User
+                    {
+                        UserName = User.AdmLogin,
+                    };
+
+                    _logger.LogInformation("Создание администратора...");
+                    identityResult = await _userManager.CreateAsync(user, User.DefaultAdmPassword);
+                    ok = _handleResult(identityResult,
+                        "Создание администратора выполнено успешно.",
+                        "Ошибка создания администратора: {0}"
+                    );
+
+                    if (ok)
+                    {
+                        user = await _userManager.FindByNameAsync(User.AdmLogin);
+                    }
+                }
+            }
+
+            if (ok)
+            {
+                if (user != null && !(await _userManager.IsInRoleAsync(user, Role.Administrators)))
+                {
+                    _logger.LogInformation("Добавление администратора в группу администраторов...");
+                    identityResult = await _userManager.AddToRoleAsync(user, Role.Administrators);
+                    ok = _handleResult(identityResult,
+                        "Добавление администратора в группу администраторов выполнено успешно.",
+                        "Ошибка добавления администратора в группу администраторов: {0}"
+                    );
+                }
+            }
+        }
+
+        private bool _handleResult(IdentityResult result, string okMessage, string errMessage)
+        {
+            var ret = result.Succeeded;
+            _logger.LogInformation(ret ? okMessage : string.Format(errMessage, string.Join(", ", result.Errors.Select(e => e.Description))));
+
+            return ret;
+        }
+
     }
 }

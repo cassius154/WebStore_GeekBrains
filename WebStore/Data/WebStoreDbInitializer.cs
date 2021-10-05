@@ -22,6 +22,7 @@ namespace WebStore.Data
 
         public WebStoreDbInitializer(WebStoreDbContext db,
             ILogger<WebStoreDbInitializer> logger,
+            //IPasswordHasher<User> hasher,  //сервис, позволяющий хешировать строку для сравнения ее с хешем пароля из в БД
             UserManager<User> userManager,
             RoleManager<Role> roleManager)
         {

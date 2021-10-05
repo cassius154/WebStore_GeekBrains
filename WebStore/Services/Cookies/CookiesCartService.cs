@@ -124,6 +124,7 @@ namespace WebStore.Services.Cookies
 
         public CartViewModel GetViewModel()
         {
+            return null;
         }
     }
 }

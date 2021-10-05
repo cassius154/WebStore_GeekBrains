@@ -41,6 +41,8 @@ namespace WebStore.Controllers
             if (regResult.Succeeded)
             {
                 await _signInManager.SignInAsync(user, false); //false - непостоянный, разовый вход
+                await _userManager.AddToRoleAsync(user, Role.Users);  //добавляем сразу в группу Users
+
                 return RedirectToAction("Index", "Home");
             }
 

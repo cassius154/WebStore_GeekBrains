@@ -12,6 +12,7 @@ using WebStore.Data;
 using WebStore.Domain.Identity;
 using WebStore.Infrastructure.Conventions;
 using WebStore.Infrastructure.Middleware;
+using WebStore.Services.Cookies;
 using WebStore.Services.Interfaces;
 using WebStore.Services.Memory;
 using WebStore.Services.SQL;
@@ -83,6 +84,7 @@ namespace WebStore
 
             //services.AddScoped<IProductService, MemoryProductService>();
             services.AddScoped<IProductService, DBProductService>();
+            services.AddScoped<ICartService, CookiesCartService>();
 
             services.AddControllersWithViews(opt => opt.Conventions.Add(new TestControllerConvention()))
                 .AddRazorRuntimeCompilation();

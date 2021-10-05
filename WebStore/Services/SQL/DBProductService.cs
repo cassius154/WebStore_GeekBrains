@@ -46,7 +46,7 @@ namespace WebStore.Services.SQL
                 .Include(p => p.Section)
                 .Include(p => p.Brand);
 
-            if (filter.Ids.Length > 0)
+            if (filter?.Ids?.Length > 0)
             {
                 ret = ret.Where(p => filter.Ids.Contains(p.Id));
             }

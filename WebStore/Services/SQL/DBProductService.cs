@@ -46,14 +46,21 @@ namespace WebStore.Services.SQL
                 .Include(p => p.Section)
                 .Include(p => p.Brand);
 
-            if (filter?.BrandId is { } brandId)
+            if (filter.Ids.Length > 0)
             {
-                ret = ret.Where(p => p.BrandId == brandId);
+                ret = ret.Where(p => filter.Ids.Contains(p.Id));
             }
-
-            if (filter?.SectionId is not null)
+            else
             {
-                ret = ret.Where(p => p.SectionId == filter.SectionId);
+                if (filter?.BrandId is { } brandId)
+                {
+                    ret = ret.Where(p => p.BrandId == brandId);
+                }
+
+                if (filter?.SectionId is not null)
+                {
+                    ret = ret.Where(p => p.SectionId == filter.SectionId);
+                }
             }
 
             return ret.AsNoTracking(); //.ToList();

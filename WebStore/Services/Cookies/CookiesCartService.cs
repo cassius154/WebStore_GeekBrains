@@ -4,7 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
+using WebStore.Domain;
 using WebStore.Domain.Entities;
+using WebStore.DTO;
 using WebStore.Services.Interfaces;
 using WebStore.ViewModels;
 
@@ -124,7 +126,18 @@ namespace WebStore.Services.Cookies
 
         public CartViewModel GetViewModel()
         {
-            return null;
+            var products = _productService.GetProducts(new ProductFilter
+            {
+                Ids = _cart.Items.Select(i => i.ProductId).ToArray()
+            });
+            var productViewDict = products.ToProductView().ToDictionary(p => p.Id);
+
+            return new CartViewModel
+            {
+                Items = _cart.Items
+                    .Where(item => productViewDict.ContainsKey(item.ProductId))
+                    .Select(item => (productViewDict[item.ProductId], item.Quantity)),
+            };
         }
     }
 }

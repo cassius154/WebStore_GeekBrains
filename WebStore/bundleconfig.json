@@ -11,16 +11,14 @@
   {
     "outputFileName": "wwwroot/js/site.js",
     "inputFiles": [
-      "wwwroot/js/contact.js",
-      "wwwroot/js/gmaps.js",
       "wwwroot/js/price-range.js",
       "wwwroot/js/main.js"
     ],
     "minify": {
       "enabled": true,
-      "renameLocals": true,
-      "gzip": true
-    },
-    "sourceMap": true
+      "renameLocals": true
+      //"gzip": true
+    }
+    //"sourceMap": true
   }
 ]

@@ -3,6 +3,7 @@ using System.Linq;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using WebStore.Domain.Identity;
 using WebStore.DTO;
 using WebStore.Services.Interfaces;
 using WebStore.ViewModels;
@@ -11,7 +12,7 @@ namespace WebStore.Controllers
 {
     //[Route("Employees/[action]/{id?}")]
     //[Route("Staff/[action]/{id?}")]
-    [Authorize(Roles = "Administrators")]
+    [Authorize]
     public class EmployeesController : Controller
     {
         private readonly IEmployeeService _empService;
@@ -43,6 +44,7 @@ namespace WebStore.Controllers
             return View(DataMapper.CreateEmployeeViewModel(emp));
         }
 
+        [Authorize(Roles = Role.Administrators)]
         public IActionResult Edit(int? id)
         {
             if (id is null)
@@ -64,6 +66,7 @@ namespace WebStore.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = Role.Administrators)]
         public IActionResult Edit(EmployeeViewModel model)
         {
             _validateModel(model);
@@ -89,12 +92,15 @@ namespace WebStore.Controllers
             return RedirectToAction("Index");
         }
 
+        [Authorize(Roles = Role.Administrators)]
         public IActionResult Create1() => View();
 
+        [Authorize(Roles = Role.Administrators)]
         public IActionResult Create2() => View("Edit", new EmployeeViewModel());
 
 
         [HttpPost]
+        [Authorize(Roles = Role.Administrators)]
         public IActionResult Create1(EmployeeViewModel model)
         {
             _validateModel(model);
@@ -108,6 +114,7 @@ namespace WebStore.Controllers
             return RedirectToAction("Index");
         }
 
+        [Authorize(Roles = Role.Administrators)]
         public IActionResult Delete(int? id)
         {
             if (id is null || id.Value < 1)
@@ -126,6 +133,7 @@ namespace WebStore.Controllers
 
         [HttpPost]
         [ActionName("Delete")]
+        [Authorize(Roles = Role.Administrators)]
         public IActionResult DeleteConfirmed(int? id)
         {
             if (id != null)

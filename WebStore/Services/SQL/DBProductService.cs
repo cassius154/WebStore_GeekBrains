@@ -22,9 +22,30 @@ namespace WebStore.Services.SQL
             return _db.Brands.AsNoTracking(); //.ToList();  //должно сработать и без ToList() - сработает при первом foreach где-нибудь во View
         }
 
+        public Brand GetBrandById(int id) => _db.Brands.Find(id);
+
+        public IEnumerable<Section> GetSections()
+        {
+            return _db.Sections.AsNoTracking(); //.ToList();
+        }
+
+        public Section GetSectionById(int id) => _db.Sections.SingleOrDefault(s => s.Id == id);
+
+        public Product GetProductById(int id)
+        {
+            return _db.Products
+                .Include(p => p.Section)
+                .Include(p => p.Brand)
+                .AsNoTracking()
+                .FirstOrDefault(p => p.Id == id);
+        }
+
         public IEnumerable<Product> GetProducts(ProductFilter filter = null)
         {
-            IQueryable<Product> ret = _db.Products;
+            IQueryable<Product> ret = _db.Products
+                .Include(p => p.Section)
+                .Include(p => p.Brand);
+
             if (filter?.BrandId is { } brandId)
             {
                 ret = ret.Where(p => p.BrandId == brandId);
@@ -38,9 +59,6 @@ namespace WebStore.Services.SQL
             return ret.AsNoTracking(); //.ToList();
         }
 
-        public IEnumerable<Section> GetSections()
-        {
-            return _db.Sections.AsNoTracking(); //.ToList();
-        }
+
     }
 }

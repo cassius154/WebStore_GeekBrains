@@ -135,7 +135,7 @@ namespace WebStore.Services.Cookies
             return new CartViewModel
             {
                 Items = _cart.Items
-                    .Where(item => productViewDict.ContainsKey(item.ProductId))
+                    .Where(item => productViewDict.ContainsKey(item.ProductId))  //здесь мы отсекаем возможные левые Id из корзины, и оставляем только те, которые реально вытащили из БД
                     .Select(item => (productViewDict[item.ProductId], item.Quantity)),
             };
         }

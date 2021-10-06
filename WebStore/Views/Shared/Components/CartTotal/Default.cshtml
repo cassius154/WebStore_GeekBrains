@@ -1,0 +1,7 @@
+﻿@model CartViewModel
+
+<ul>
+    <li>Стоимость доставки <span>Free</span></li>
+    <li>Позиций <span>@Model.ItemsCount.ToString()</span></li>
+    <li>Итого <span>@Model.TotalPrice.ToString("C")</span></li>
+</ul>

@@ -12,7 +12,6 @@ using WebStore.Data;
 using WebStore.Domain.Identity;
 using WebStore.Infrastructure.Conventions;
 using WebStore.Infrastructure.Middleware;
-using WebStore.Services.Cookies;
 using WebStore.Services.Interfaces;
 using WebStore.Services.Memory;
 using WebStore.Services.SQL;
@@ -84,7 +83,6 @@ namespace WebStore
 
             //services.AddScoped<IProductService, MemoryProductService>();
             services.AddScoped<IProductService, DBProductService>();
-            services.AddScoped<ICartService, CookiesCartService>();
 
             services.AddControllersWithViews(opt => opt.Conventions.Add(new TestControllerConvention()))
                 .AddRazorRuntimeCompilation();
@@ -122,6 +120,12 @@ namespace WebStore
                 {
                     await context.Response.WriteAsync(Configuration["Greeting"]);
                 });
+
+                //это то, что нагенерилось при добавлении Area - перенесли из сгенеренного файла
+                endpoints.MapControllerRoute(
+                            name: "areas",
+                            pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
+                          );
 
                 //endpoints.MapDefaultControllerRoute();
                 endpoints.MapControllerRoute(

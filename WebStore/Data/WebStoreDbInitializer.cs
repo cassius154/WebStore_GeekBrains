@@ -1,8 +1,11 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Data;
+using System.Diagnostics;
 using System.IO.Pipelines;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using WebStore.DAL.Context;
@@ -19,6 +22,7 @@ namespace WebStore.Data
 
         public WebStoreDbInitializer(WebStoreDbContext db,
             ILogger<WebStoreDbInitializer> logger,
+            //IPasswordHasher<User> hasher,  //сервис, позволяющий хешировать строку для сравнения ее с хешем пароля из в БД
             UserManager<User> userManager,
             RoleManager<Role> roleManager)
         {
@@ -47,9 +51,26 @@ namespace WebStore.Data
                 await _db.Database.MigrateAsync();
             }
 
-            await _initProductsAsync();
+            try
+            {
+                await _initProductsAsync();
+            }
+            catch (System.Exception ex)
+            {
+                _logger.LogError(ex, "Ошибка инициализации каталога товаров");
+                throw;
+            }
 
-            await _initAdministrators();
+            try
+            {
+                //await _initAdministratorsAsync();
+                await _initIdentityAsync();
+            }
+            catch (System.Exception ex)
+            {
+                _logger.LogError(ex, "Ошибка инициализации системы Identity");
+                throw;
+            }
         }
 
         private async Task _initProductsAsync()
@@ -118,7 +139,60 @@ namespace WebStore.Data
             _logger.LogInformation($"Добавление каталога выполнено успешно за {timer/*ElapsedMilliseconds*/.Elapsed.TotalMilliseconds} мс");
         }
 
-        private async Task _initAdministrators()
+        private async Task _initIdentityAsync()
+        {
+            _logger.LogInformation("Инициализация системы Identity");
+            var timer = Stopwatch.StartNew();
+            
+            async Task checkRoleAsync(string roleName)
+            {
+                if (await _roleManager.RoleExistsAsync(roleName))
+                {
+                    _logger.LogInformation($"Роль {roleName} существует.");
+                }
+                else
+                {
+                    _logger.LogInformation($"Роль {roleName} не существует.");
+                    var identityResult = await _roleManager.CreateAsync(new Role { Name = roleName });
+                    if (!identityResult.Succeeded)
+                    {
+                        throw new Exception($"Ошибки создания роли: {string.Join(", ", identityResult.Errors.Select(e => e.Description))}");
+                    }
+                    _logger.LogInformation($"Роль {roleName} успешно создана.");
+                }
+            }
+
+            await checkRoleAsync(Role.Administrators);
+            await checkRoleAsync(Role.Users);
+
+            if (await _userManager.FindByNameAsync(User.AdmLogin) is null)
+            {
+                _logger.LogInformation($"Пользователь {User.AdmLogin} не существует.");
+
+                var admin = new User
+                {
+                    UserName = User.AdmLogin,
+                };
+
+                var identityResult = await _userManager.CreateAsync(admin, User.DefaultAdmPassword);
+                if (identityResult.Succeeded)
+                {
+                    _logger.LogInformation($"Пользователь {admin.UserName} успешно создан.");
+                    identityResult = await _userManager.AddToRoleAsync(admin, Role.Administrators);
+                    _logger.LogInformation($"Пользователю {admin.UserName} успешно добавлена роль {Role.Administrators}.");
+                }
+                else
+                {
+                    var errors = identityResult.Errors.Select(e => e.Description);
+                    _logger.LogError($"Учетная запись администратора не создана! Ошибки: {string.Join(", ", errors)}");
+
+                    throw new InvalidOperationException($"Невозможно создать администратора {string.Join(", ", errors)}");
+                }
+            }
+            _logger.LogInformation($"Данные системы Identity успешно добавлены в БД за {timer.Elapsed.TotalMilliseconds}мс");
+        }
+
+        private async Task _initAdministratorsAsync()
         {
             IdentityResult identityResult;
             User user = null;

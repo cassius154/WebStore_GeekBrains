@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using WebStore.Domain.Identity;
@@ -6,6 +7,7 @@ using WebStore.ViewModels.Identity;
 
 namespace WebStore.Controllers
 {
+    [Authorize]
     public class AccountController : Controller
     {
         private readonly UserManager<User> _userManager;
@@ -18,6 +20,8 @@ namespace WebStore.Controllers
         }
 
         #region Register
+
+        [AllowAnonymous]
         public IActionResult Register() => View();
 
         //AntiForgeryToken - к форме прикрепляется некая информация, которую заранее передает сервер
@@ -25,6 +29,7 @@ namespace WebStore.Controllers
         //потом этот токен возвращается с формой в POST - и можно подтвердить, что не было подмены агента (браузера)
         //не было перехвата информации и ее подмены
         [HttpPost, ValidateAntiForgeryToken]
+        [AllowAnonymous]
         public async Task<IActionResult> Register(RegisterUserViewModel model)
         {
             if (!ModelState.IsValid)
@@ -41,6 +46,8 @@ namespace WebStore.Controllers
             if (regResult.Succeeded)
             {
                 await _signInManager.SignInAsync(user, false); //false - непостоянный, разовый вход
+                await _userManager.AddToRoleAsync(user, Role.Users);  //добавляем сразу в группу Users
+
                 return RedirectToAction("Index", "Home");
             }
 
@@ -53,9 +60,11 @@ namespace WebStore.Controllers
         #endregion Register
 
         #region Login
+        [AllowAnonymous]
         public IActionResult Login(string returnUrl) => View(new LoginViewModel { ReturnUrl = returnUrl });
 
         [HttpPost, ValidateAntiForgeryToken]
+        [AllowAnonymous]
         public async Task<IActionResult> Login(LoginViewModel model)
         {
             if (!ModelState.IsValid)
@@ -95,6 +104,7 @@ namespace WebStore.Controllers
             return RedirectToAction("Index", "Home");
         }
 
+        [AllowAnonymous]
         public IActionResult AccessDenied()
         {
             return View();

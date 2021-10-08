@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using WebStore.Domain;
+using WebStore.DTO;
 using WebStore.Services.Interfaces;
 using WebStore.ViewModels;
 
@@ -36,16 +34,22 @@ namespace WebStore.Controllers
                 SectionId = sectionId,
                 Products = products
                     .OrderBy(p => p.Order)
-                    .Select(p => new ProductViewModel
-                    {
-                        Id = p.Id,
-                        Name = p.Name,
-                        ImageUrl = p.ImageUrl,
-                        Price = p.Price,
-                    })
+                    .ToProductView()
             };
 
             return View(model);
+        }
+
+        public IActionResult Details(int Id)
+        {
+            var product = _productService.GetProductById(Id);
+
+            if (product is null)
+            {
+                return NotFound();
+            }
+
+            return View(product.ToProductView());
         }
     }
 }

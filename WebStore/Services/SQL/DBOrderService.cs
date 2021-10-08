@@ -43,7 +43,7 @@ namespace WebStore.Services.SQL
                 User = user,
                 Address = orderModel.Address,
                 Phone = orderModel.Phone,
-                Description = orderModel.Descritpion,
+                Description = orderModel.Description,
             };
 
 

@@ -22,7 +22,7 @@ namespace WebStore.Domain.Entities.Orders
         public string Address { get; set; }
 
         //рекомендуемый тип для хранения даты
-        public DateTimeOffset Date { get; set; } = DateTimeOffset.UtcNow;  //возможно, лучше DateTimeOffset.Now - надо выяснить
+        public DateTimeOffset Date { get; set; } = DateTimeOffset.Now;  //или DateTimeOffset.UtcNow. Возможно, лучше DateTimeOffset.Now - надо выяснить
 
         public string Description { get; set; }
 

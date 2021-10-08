@@ -12,6 +12,6 @@ namespace WebStore.ViewModels
 
         public string Phone { get; set; }
 
-        public string Descritpion { get; set; }
+        public string Description { get; set; }
     }
 }

@@ -87,7 +87,7 @@ namespace WebStore.Services.SQL
             return order;
         }
 
-        public async Task<IEnumerable<Order>> GetUserOrder(string userName)
+        public async Task<IEnumerable<Order>> GetUserOrders(string userName)
         {
             var orders = await _db.Orders
                 .Include(o => o.User)

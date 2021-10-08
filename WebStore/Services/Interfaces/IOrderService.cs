@@ -7,7 +7,7 @@ namespace WebStore.Services.Interfaces
 {
     public interface IOrderService
     {
-        Task<IEnumerable<Order>> GetUserOrder(string userName);
+        Task<IEnumerable<Order>> GetUserOrders(string userName);
 
         Task<Order> GetOrderById(int id);
 

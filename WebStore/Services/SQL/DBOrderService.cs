@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using WebStore.DAL.Context;
+using WebStore.Domain.Entities;
 using WebStore.Domain.Entities.Orders;
 using WebStore.Domain.Identity;
 using WebStore.Services.Interfaces;
@@ -22,19 +24,79 @@ namespace WebStore.Services.SQL
             _userManager = userManager;
         }
 
-        public Task<Order> CreateOrder(string userName, CartViewModel cart, OrderViewModel order)
+        public async Task<Order> CreateOrder(string userName, CartViewModel cart, OrderViewModel orderModel)
         {
-            throw new NotImplementedException();
+            //ConfigureAwait(false) надо вызывать только при первом асинхронном вызове - дальше необязательно. (ПРОВЕРИТЬ!!!)
+            var user = await _userManager.FindByNameAsync(userName).ConfigureAwait(false);
+            if (user is null)
+            {
+                throw new InvalidOperationException($"Пользователь {userName} не найден");
+            }
+
+            //новый синтаксис - без блока {}
+            //await using (var tx = await _db.Database.BeginTransactionAsync()) {}
+            await using var tx = await _db.Database.BeginTransactionAsync();
+
+            //создаем Order
+            var order = new Order
+            { 
+                User = user,
+                Address = orderModel.Address,
+                Phone = orderModel.Phone,
+                Description = orderModel.Descritpion,
+            };
+
+
+            //создаем Items
+            //берем id-шники продуктов из корзины
+            var pIds = cart.Items.Select(i => i.Product.Id);
+            //по этим id-шникам тянем продукты из базы
+            var cartProducts = await _db.Products
+                .Where(p => pIds.Contains(p.Id))
+                .ToArrayAsync();
+            //джойним продукты из корзины с продуктами из базы по Id
+            order.Items = cart.Items.Join(
+                cartProducts,
+                cartItem => cartItem.Product.Id,  //продукты из корзины
+                cartProduct => cartProduct.Id,    //продукты из БД - джойним по Id
+                (cartItem, cartProduct) => new OrderItem
+                {
+                    Order = order,  //созданный order
+                    Product = cartProduct,
+                    Price = cartProduct.Price,     //цена из БД - тут можно добавить скидку
+                    Quantity = cartItem.Quantity,  //кол-во из корзины
+                }).ToArray();
+
+            await _db.Orders.AddAsync(order);
+            //await _db.Set<OrderItem>().AddRangeAsync(order.Items);  //нет необходимости - _db.Orders.AddAsync(order) сам все добавит
+            await _db.SaveChangesAsync();
+
+            await tx.CommitAsync();
+
+            return order;
         }
 
-        public Task<Order> GetOrderById(int id)
+        public async Task<Order> GetOrderById(int id)
         {
-            throw new NotImplementedException();
+            var order = await _db.Orders
+                .Include(o => o.User)
+                .Include(o => o.Items)
+                .ThenInclude(i => i.Product)
+                .FirstOrDefaultAsync(o => o.Id == id)
+                .ConfigureAwait(false);    //понять, для чего это надо...
+            return order;
         }
 
-        public Task<IEnumerable<Order>> GetUserOrder(string userName)
+        public async Task<IEnumerable<Order>> GetUserOrder(string userName)
         {
-            throw new NotImplementedException();
+            var orders = await _db.Orders
+                .Include(o => o.User)
+                .Include(o => o.Items)
+                .ThenInclude(i => i.Product)
+                .Where(o => o.User.UserName == userName)
+                .ToArrayAsync()
+                .ConfigureAwait(false);    //понять, для чего это надо...
+            return orders;
         }
     }
 }

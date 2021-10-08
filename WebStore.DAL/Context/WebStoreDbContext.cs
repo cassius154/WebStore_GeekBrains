@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using WebStore.Domain.Entities;
+using WebStore.Domain.Entities.Orders;
 using WebStore.Domain.Identity;
 
 namespace WebStore.DAL.Context
@@ -50,6 +51,12 @@ namespace WebStore.DAL.Context
         public DbSet<Section> Sections { get; set; }
 
         public DbSet<Product> Products { get; set; }
+
+        public DbSet<Order> Orders { get; set; }
+
+        //необязательно - таблица создастся сама из Order по связи один-ко-многим
+        //если нужен доступ непосредственно к OrderItems - то добавить
+        //public DbSet<OrderItem> OrderItems { get; set; } 
     }
 }
 

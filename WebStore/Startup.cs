@@ -45,6 +45,11 @@ namespace WebStore
                             //для Sqlite указываем еще библиотеку, откуда брать миграции
                             o => o.MigrationsAssembly("WebStore.DAL.Sqlite")));
                     break;
+
+                case "InMemory":
+                    services.AddDbContext<WebStoreDbContext>(opt =>
+                        opt.UseInMemoryDatabase("WebStore.db"));
+                    break;
             }
 
             services.AddIdentity<User, Role>(/*opt => { opt. }*/)  //можно сконфигурить прямо тут

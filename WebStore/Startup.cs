@@ -30,8 +30,22 @@ namespace WebStore
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<WebStoreDbContext>(opt => 
-                opt.UseSqlServer(Configuration.GetConnectionString("WebStoreSql")));
+            var dbType = Configuration["DatabaseType"];
+            switch (dbType)
+            {
+                default: throw new InvalidOperationException($"Тип БД {dbType} не поддерживается.");
+
+                case "WebStoreSql":
+                    services.AddDbContext<WebStoreDbContext>(opt =>
+                        opt.UseSqlServer(Configuration.GetConnectionString(dbType)));
+                    break;
+                case "WebStoreSqlite":
+                    services.AddDbContext<WebStoreDbContext>(opt =>
+                        opt.UseSqlite(Configuration.GetConnectionString(dbType),
+                            //для Sqlite указываем еще библиотеку, откуда брать миграции
+                            o => o.MigrationsAssembly("WebStore.DAL.Sqlite")));
+                    break;
+            }
 
             services.AddIdentity<User, Role>(/*opt => { opt. }*/)  //можно сконфигурить прямо тут
                 .AddEntityFrameworkStores<WebStoreDbContext>()    //указываем, каким способом хранить - посредством EF

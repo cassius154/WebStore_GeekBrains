@@ -1,0 +1,69 @@
+﻿@model IEnumerable<EmployeeViewModel>
+
+@{
+    ViewData["Title"] = "Сотрудники";
+}
+
+
+<div class="container">
+    <h3>Сотрудники</h3>
+    <hr />
+
+    @if (User.IsInRole(Role.Administrators))
+    {
+        <p><a asp-action="Create1" class="btn btn-default">Добавить сотрудника - Метод 1</a></p>
+
+        <p><a asp-action="Create2" class="btn btn-default">Добавить сотрудника - Метод 2</a></p>
+
+        <p><a asp-action="Edit" class="btn btn-default">Добавить сотрудника - Метод 3</a></p>
+    }
+
+    @if (Model.Any())
+    {
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Фамилия</th>
+                    <th>Имя</th>
+                    <th>Отчество</th>
+                    <th>Возраст</th>
+                    <th></th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.Id</td>
+                        <td>@item.LastName</td>
+                        <td>@item.FirstName</td>
+                        <td>@item.Patronymic</td>
+                        <td><span title="@item.BirthDate.Value.ToString("dd.MM.yyyy")">@item.Age</span></td>
+                        <td>
+                            <a asp-controller="Employees" asp-action="Details" asp-route-id="@item.Id" title="Информация"><i class="fa fa-info"></i></a>&nbsp;
+
+                            @if (User.IsInRole(Role.Administrators))
+                            {
+                                <a asp-controller="Employees" asp-action="Edit" asp-route-id="@item.Id" title="Редактирование"><i class="fa fa-edit"></i></a><text>&nbsp;</text>
+                                <a asp-controller="Employees" asp-action="Delete" asp-route-id="@item.Id" title="Удаление"><i class="fa fa-times" style="color:red"></i></a>
+                                <form asp-action="Delete" asp-route-id="@item.Id">
+                                    <p>
+                                        <input type="submit" value="Del direct" class="btn btn-xs btn-danger" />
+                                    </p>
+                                </form>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p>Сотрудников нет!</p>
+    }
+
+    <p><a asp-controller="Home" asp-action="Index" class="btn btn-default">Домой</a></p>
+</div>

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 using WebStore.DAL.Context;
-using WebStore.Models;
+using WebStore.Domain.Models;
 using WebStore.Services.Interfaces;
 
 namespace WebStore.Services.SQL

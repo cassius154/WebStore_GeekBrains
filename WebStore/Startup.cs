@@ -30,8 +30,27 @@ namespace WebStore
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<WebStoreDbContext>(opt => 
-                opt.UseSqlServer(Configuration.GetConnectionString("WebStoreSql")));
+            var dbType = Configuration["DatabaseType"];
+            switch (dbType)
+            {
+                default: throw new InvalidOperationException($"Тип БД {dbType} не поддерживается.");
+
+                case "WebStoreSql":
+                    services.AddDbContext<WebStoreDbContext>(opt =>
+                        opt.UseSqlServer(Configuration.GetConnectionString(dbType)));
+                    break;
+                case "WebStoreSqlite":
+                    services.AddDbContext<WebStoreDbContext>(opt =>
+                        opt.UseSqlite(Configuration.GetConnectionString(dbType),
+                            //для Sqlite указываем еще библиотеку, откуда брать миграции
+                            o => o.MigrationsAssembly("WebStore.DAL.Sqlite")));
+                    break;
+
+                case "InMemory":
+                    services.AddDbContext<WebStoreDbContext>(opt =>
+                        opt.UseInMemoryDatabase("WebStore.db"));
+                    break;
+            }
 
             services.AddIdentity<User, Role>(/*opt => { opt. }*/)  //можно сконфигурить прямо тут
                 .AddEntityFrameworkStores<WebStoreDbContext>()    //указываем, каким способом хранить - посредством EF
@@ -85,6 +104,7 @@ namespace WebStore
             //services.AddScoped<IProductService, MemoryProductService>();
             services.AddScoped<IProductService, DBProductService>();
             services.AddScoped<ICartService, CookiesCartService>();
+            services.AddScoped<IOrderService, DBOrderService>();
 
             services.AddControllersWithViews(opt => opt.Conventions.Add(new TestControllerConvention()))
                 .AddRazorRuntimeCompilation();
@@ -122,6 +142,12 @@ namespace WebStore
                 {
                     await context.Response.WriteAsync(Configuration["Greeting"]);
                 });
+
+                //это то, что нагенерилось при добавлении Area - перенесли из сгенеренного файла
+                endpoints.MapControllerRoute(
+                            name: "areas",
+                            pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
+                          );
 
                 //endpoints.MapDefaultControllerRoute();
                 endpoints.MapControllerRoute(

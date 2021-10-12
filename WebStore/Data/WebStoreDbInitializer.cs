@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Data;
 using System.Diagnostics;
-using System.IO.Pipelines;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using WebStore.DAL.Context;
@@ -39,16 +37,23 @@ namespace WebStore.Data
             //var deleted = await _db.Database.EnsureDeletedAsync();  //если надо удалить БД при старте
             //var created = await _db.Database.EnsureCreatedAsync(); //целесообразно вызывать, если нет миграций
 
-            //если есть миграции, то...
-            //список ожидающих миграций
-            var pendingMigrations = await _db.Database.GetPendingMigrationsAsync();
-            //список уже примененных миграций
-            var appliedMigrations = await _db.Database.GetAppliedMigrationsAsync();
-
-            if (pendingMigrations.Any())
+            if (_db.Database.ProviderName.EndsWith(".InMemory"))
             {
-                _logger.LogInformation($"Применение миграций: {string.Join(",", pendingMigrations)}");
-                await _db.Database.MigrateAsync();
+                await _db.Database.EnsureCreatedAsync();
+            }
+            else
+            {
+                //если есть миграции, то...
+                //список ожидающих миграций
+                var pendingMigrations = await _db.Database.GetPendingMigrationsAsync();
+                //список уже примененных миграций
+                var appliedMigrations = await _db.Database.GetAppliedMigrationsAsync();
+
+                if (pendingMigrations.Any())
+                {
+                    _logger.LogInformation($"Применение миграций: {string.Join(",", pendingMigrations)}");
+                    await _db.Database.MigrateAsync();
+                }
             }
 
             try

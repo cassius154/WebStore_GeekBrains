@@ -7,7 +7,7 @@ using WebStore.DAL.Context;
 using WebStore.Domain.Models;
 using WebStore.Interfaces.Services;
 
-namespace WebStore.Services.SQL
+namespace WebStore.Services.Services.SQL
 {
     //public class DBEmployeeService : IEmployeeService
     //{

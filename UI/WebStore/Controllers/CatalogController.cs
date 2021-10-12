@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using WebStore.Domain;
 using WebStore.Domain.ViewModels;
-using WebStore.DTO;
+using WebStore.Services.DTO;
 using WebStore.Interfaces.Services;
 
 namespace WebStore.Controllers

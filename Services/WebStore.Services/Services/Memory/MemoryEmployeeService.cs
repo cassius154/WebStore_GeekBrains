@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Extensions.Logging;
-using WebStore.Data;
+using WebStore.Services.Data;
 using WebStore.Domain.Models;
 using WebStore.Interfaces.Services;
 
-namespace WebStore.Services.Memory
+namespace WebStore.Services.Services.Memory
 {
     public class MemoryEmployeeService : IEmployeeService
     {

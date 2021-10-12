@@ -4,10 +4,10 @@ using Newtonsoft.Json;
 using WebStore.Domain;
 using WebStore.Domain.Entities;
 using WebStore.Domain.ViewModels;
-using WebStore.DTO;
+using WebStore.Services.DTO;
 using WebStore.Interfaces.Services;
 
-namespace WebStore.Services.Cookies
+namespace WebStore.Services.Services.Cookies
 {
     public class CookiesCartService : ICartService
     {

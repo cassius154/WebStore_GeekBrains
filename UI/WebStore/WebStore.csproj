@@ -50,6 +50,7 @@
     <ProjectReference Include="..\..\Data\WebStore.DAL.Sqllite\WebStore.DAL.Sqlite.csproj" />
     <ProjectReference Include="..\..\Data\WebStore.DAL\WebStore.DAL.csproj" />
     <ProjectReference Include="..\..\Services\WebStore.Interfaces\WebStore.Interfaces.csproj" />
+    <ProjectReference Include="..\..\Services\WebStore.Services\WebStore.Services.csproj" />
   </ItemGroup>
 
 </Project>

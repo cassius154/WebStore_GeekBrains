@@ -10,7 +10,7 @@ using WebStore.Domain.Identity;
 using WebStore.Domain.ViewModels;
 using WebStore.Interfaces.Services;
 
-namespace WebStore.Services.SQL
+namespace WebStore.Services.Services.SQL
 {
     public class DBOrderService : IOrderService
     {

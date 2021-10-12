@@ -4,7 +4,7 @@ using WebStore.Domain.Entities;
 using WebStore.Domain.Models;
 using WebStore.Domain.ViewModels;
 
-namespace WebStore.DTO
+namespace WebStore.Services.DTO
 {
     public static class DataMapper
     {

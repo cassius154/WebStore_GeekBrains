@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using WebStore.Domain.Models;
 
-namespace WebStore.Services.Interfaces
+namespace WebStore.Interfaces.Services
 {
     public interface IEmployeeService
     {

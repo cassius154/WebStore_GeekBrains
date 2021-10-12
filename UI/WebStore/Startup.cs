@@ -12,8 +12,8 @@ using WebStore.Data;
 using WebStore.Domain.Identity;
 using WebStore.Infrastructure.Conventions;
 using WebStore.Infrastructure.Middleware;
+using WebStore.Interfaces.Services;
 using WebStore.Services.Cookies;
-using WebStore.Services.Interfaces;
 using WebStore.Services.Memory;
 using WebStore.Services.SQL;
 

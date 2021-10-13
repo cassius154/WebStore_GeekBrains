@@ -40,12 +40,12 @@ namespace WebStore.WebAPI.Controllers
             return Ok(_values[id]);
         }
 
-        [HttpGet("count")]
+        [HttpGet("count")] //адрес для вызова этого метода
         public IActionResult Count() => Ok(_values.Count);
 
         [HttpPost]
         [HttpPost("add")]  //еще один адрес для вызова этого метода
-        public IActionResult Add([FromBody]string value)
+        public IActionResult Add([FromBody] string value)
         {
             var id = _values.Count == 0 ? 1 : _values.Keys.Max() + 1;
             _values[id] = value;
@@ -56,12 +56,41 @@ namespace WebStore.WebAPI.Controllers
 
             //непонятно - возвращается созданный тут объект, а не результат GetById(id)
             //для чего тут тогда GetById? (адрес GetById возвращается в Location заголовка ответа)
-            var o = new { Id = id, Value = _values[id]};
-            return CreatedAtAction(nameof(GetById), new { id }, o); 
+            var o = new { Id = id, Value = _values[id] };
+            return CreatedAtAction(nameof(GetById), new { id }, o);
+        }
+
+        [HttpPost("addfromquery")]  //адрес для вызова этого метода
+        public IActionResult AddFromQuery(string value)
+        {
+            var id = _values.Count == 0 ? 1 : _values.Keys.Max() + 1;
+            _values[id] = value;
+
+            //CreatedAtAction = код 201, + указание адреса, куда надо перейти, чтобы получить созданное
+            //return CreatedAtAction(nameof(GetById), new { id }, _values[id]); 
+            //var o = (Id: id, Value: _values[id]);
+
+            //непонятно - возвращается созданный тут объект, а не результат GetById(id)
+            //для чего тут тогда GetById? (адрес GetById возвращается в Location заголовка ответа)
+            var o = new { Id = id, Value = _values[id] };
+            return CreatedAtAction(nameof(GetById), new { id }, o);
         }
 
         [HttpPut("{id}")]  //это передается в адресной строке
         public IActionResult Replace(int id, [FromBody] string value)  //остальные параметры будут переданы как параметры запроса или тело (форма)
+        {
+            if (!_values.ContainsKey(id))
+            {
+                return NotFound();
+            }
+
+            _values[id] = value;
+
+            return Ok(new { Id = id, Value = _values[id] });
+        }
+
+        [HttpPut("replacefromquery/{id}")] //еще один адрес для вызова этого метода (id передается в адресной строке)
+        public IActionResult ReplaceFromQuery(int id, string value)  //остальные параметры будут переданы как параметры запроса или тело (форма)
         {
             if (!_values.ContainsKey(id))
             {

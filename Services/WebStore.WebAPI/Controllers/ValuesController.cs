@@ -48,11 +48,8 @@ namespace WebStore.WebAPI.Controllers
             _values[id] = value;
 
             //CreatedAtAction = код 201, + указание адреса, куда надо перейти, чтобы получить созданное
+            //адрес GetById возвращается в Location заголовка ответа
             //return CreatedAtAction(nameof(GetById), new { id }, _values[id]); 
-            //var o = (Id: id, Value: _values[id]);
-
-            //непонятно - возвращается созданный тут объект, а не результат GetById(id)
-            //для чего тут тогда GetById? (адрес GetById возвращается в Location заголовка ответа)
             var o = new { Id = id, Value = _values[id] };
             return CreatedAtAction(nameof(GetById), new { id }, o);
         }
@@ -64,17 +61,15 @@ namespace WebStore.WebAPI.Controllers
             _values[id] = value;
 
             //CreatedAtAction = код 201, + указание адреса, куда надо перейти, чтобы получить созданное
+            //адрес GetById возвращается в Location заголовка ответа
             //return CreatedAtAction(nameof(GetById), new { id }, _values[id]); 
-            //var o = (Id: id, Value: _values[id]);
-
-            //непонятно - возвращается созданный тут объект, а не результат GetById(id)
-            //для чего тут тогда GetById? (адрес GetById возвращается в Location заголовка ответа)
             var o = new { Id = id, Value = _values[id] };
             return CreatedAtAction(nameof(GetById), new { id }, o);
         }
 
         [HttpPut("{id}")]  //это передается в адресной строке
-        public IActionResult Replace(int id, [FromBody] string value)  //остальные параметры будут переданы как параметры запроса или тело (форма)
+        //остальные параметры будут переданы как параметры запроса или тело (форма)
+        public IActionResult Replace(int id, [FromBody] string value)
         {
             if (!_values.ContainsKey(id))
             {
@@ -87,7 +82,8 @@ namespace WebStore.WebAPI.Controllers
         }
 
         [HttpPut("replacefromquery/{id}")] //еще один адрес для вызова этого метода (id передается в адресной строке)
-        public IActionResult ReplaceFromQuery(int id, string value)  //остальные параметры будут переданы как параметры запроса или тело (форма)
+        //остальные параметры будут переданы как параметры запроса или тело (форма)
+        public IActionResult ReplaceFromQuery(int id, string value)
         {
             if (!_values.ContainsKey(id))
             {

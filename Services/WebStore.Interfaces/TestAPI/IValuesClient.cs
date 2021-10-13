@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace WebStore.Interfaces.TestAPI
 {
@@ -16,7 +12,7 @@ namespace WebStore.Interfaces.TestAPI
 
         void Add(string value);
 
-        void Edit(int i, string value);
+        void Edit(int id, string value);
 
         bool Delete(int id);
     }

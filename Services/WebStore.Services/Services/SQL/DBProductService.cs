@@ -26,7 +26,9 @@ namespace WebStore.Services.Services.SQL
 
         public IEnumerable<Section> GetSections()
         {
-            return _db.Sections.AsNoTracking(); //.ToList();
+            //без AsNoTracking возвращаются элементы с установленными Parent
+            //с установленным AsNoTracking все Parent = null
+            return _db.Sections; //.AsNoTracking(); //.ToList();
         }
 
         public Section GetSectionById(int id) => _db.Sections.SingleOrDefault(s => s.Id == id);

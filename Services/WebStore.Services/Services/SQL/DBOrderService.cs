@@ -82,7 +82,11 @@ namespace WebStore.Services.Services.SQL
                 .Include(o => o.Items)
                 .ThenInclude(i => i.Product)
                 .FirstOrDefaultAsync(o => o.Id == id)
-                .ConfigureAwait(false);    //понять, для чего это надо...
+                //если мы пришли сюда в потоке thread.id = 7,
+                //без ConfigureAwait(false) будем дожидаться thread,
+                //который нас сюда привел (id = 7)
+                //с ConfigureAwait(false) будем брать любой thread
+                .ConfigureAwait(false);
             return order;
         }
 
@@ -94,7 +98,7 @@ namespace WebStore.Services.Services.SQL
                 .ThenInclude(i => i.Product)
                 .Where(o => o.User.UserName == userName)
                 .ToArrayAsync()
-                .ConfigureAwait(false);    //понять, для чего это надо...
+                .ConfigureAwait(false);
             return orders;
         }
     }

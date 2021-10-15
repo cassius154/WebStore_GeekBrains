@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using WebStore.Domain.Entities.Orders;
-using WebStore.Domain.ViewModels;
+using WebStore.Domain.DTO;
 using WebStore.Interfaces.Services;
 
 namespace WebStore.WebAPI.Controllers
@@ -25,7 +20,7 @@ namespace WebStore.WebAPI.Controllers
         public async Task<IActionResult> GetUserOrders(string userName)
         {
             var orders = await _orderService.GetUserOrders(userName);
-            return Ok(orders);
+            return Ok(orders.ToDTO());
         }
 
         [HttpGet("{id}")]
@@ -36,14 +31,14 @@ namespace WebStore.WebAPI.Controllers
             var order = await _orderService.GetOrderById(id);  //если тут вызвать ConfigureAwait(false)
             //ControllerContext.HttpContext - то в новом потоке он будет сброшен и мы останемся без контекста
             //контекст здесь нужно сохранить при переходе через await
-            return order is null ? NotFound() : Ok(order);
+            return order is null ? NotFound() : Ok(order.ToDTO());
         }
 
         [HttpPost("{UserName}")]
-        public async Task<IActionResult> CreateOrder(string userName, CartViewModel cart, OrderViewModel order)
+        public async Task<IActionResult> CreateOrder(string userName, [FromBody] CreateOrderDTO orderModel)
         {
-            var order = await _orderService.CreateOrder(userName);
-            return Ok(order);
+            var order = await _orderService.CreateOrder(userName, orderModel.Items.ToCartView(), orderModel.Order);
+            return Ok(order.ToDTO());
         }
     }
 }

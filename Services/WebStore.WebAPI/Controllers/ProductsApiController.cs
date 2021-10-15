@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using WebStore.Domain.Entities;
+﻿using Microsoft.AspNetCore.Mvc;
 using WebStore.Domain;
-using WebStore.Interfaces.Services;
 using WebStore.Domain.DTO;
+using WebStore.Interfaces.Services;
 
 namespace WebStore.WebAPI.Controllers
 {

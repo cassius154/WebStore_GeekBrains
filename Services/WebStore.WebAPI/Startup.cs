@@ -1,12 +1,18 @@
 using System;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using WebStore.DAL.Context;
+using WebStore.Domain.Identity;
+using WebStore.Interfaces.Services;
+using WebStore.Services.Services.Cookies;
+using WebStore.Services.Services.Memory;
+using WebStore.Services.Services.SQL;
 
 namespace WebStore.WebAPI
 {
@@ -35,6 +41,40 @@ namespace WebStore.WebAPI
                 //        opt.UseInMemoryDatabase("WebStore.db"));
                 //    break;
             }
+
+            services.AddIdentity<User, Role>(/*opt => { opt. }*/)  //можно сконфигурить прямо тут
+                .AddEntityFrameworkStores<WebStoreDbContext>()    //указываем, каким способом хранить - посредством EF
+                .AddDefaultTokenProviders();    //это пока неясно что
+            //конфигурим Identity
+            services.Configure<IdentityOptions>(opt =>
+            {
+#if true
+                //для отладочных целей ослабляем требования к паролю
+                opt.Password.RequireDigit = false;
+                opt.Password.RequireLowercase = false;
+                opt.Password.RequireUppercase = false;
+                opt.Password.RequireNonAlphanumeric = false;
+                opt.Password.RequiredLength = 3;
+                opt.Password.RequiredUniqueChars = 3;
+#endif
+                opt.User.RequireUniqueEmail = false;
+                opt.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+
+                opt.Lockout.AllowedForNewUsers = false;
+                opt.Lockout.MaxFailedAccessAttempts = 10;
+                opt.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(15);
+            });
+
+
+            //services.AddTransient<IEmployeeService, MemoryEmployeeService>();
+            //services.AddScoped<IEmployeeService, MemoryEmployeeService>();
+            services.AddSingleton<IEmployeeService, MemoryEmployeeService>();
+            //services.AddScoped<IEmployeeService, DBEmployeeService>();
+
+            //services.AddScoped<IProductService, MemoryProductService>();
+            services.AddScoped<IProductService, DBProductService>();
+            services.AddScoped<ICartService, CookiesCartService>();
+            services.AddScoped<IOrderService, DBOrderService>();
 
             services.AddControllers();
             services.AddSwaggerGen(c =>

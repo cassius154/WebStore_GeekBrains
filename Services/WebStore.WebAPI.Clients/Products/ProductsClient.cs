@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
+﻿using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Json;
-using System.Text;
-using System.Threading.Tasks;
 using WebStore.Domain;
 using WebStore.Domain.DTO;
 using WebStore.Domain.Entities;
@@ -16,9 +11,7 @@ namespace WebStore.WebAPI.Clients.Products
 {
     public class ProductsClient : ClientBase, IProductService
     {
-        public ProductsClient(HttpClient client) : base(client, "api/products")
-        {
-        }
+        public ProductsClient(HttpClient client) : base(client, "api/products") { }
 
         public Brand GetBrandById(int id)
         {

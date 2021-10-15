@@ -64,7 +64,7 @@ namespace WebStore.Domain.DTO
                 Phone = Order.Phone,
                 Date = Order.Date,
                 Description = Order.Description,
-                Items = Order.Items.Select(ToDTO)
+                Items = Order.Items.Select(ToDTO),
             };
 
         public static Order FromDTO(this OrderDTO Order) => Order is null
@@ -76,7 +76,7 @@ namespace WebStore.Domain.DTO
                 Phone = Order.Phone,
                 Date = Order.Date,
                 Description = Order.Description,
-                Items = Order.Items.Select(FromDTO).ToList()
+                Items = Order.Items.Select(FromDTO).ToList(),
             };
 
         public static IEnumerable<OrderDTO> ToDTO(this IEnumerable<Order> Orders) => Orders.Select(ToDTO);
@@ -87,7 +87,7 @@ namespace WebStore.Domain.DTO
             {
                 ProductId = p.Product.Id,
                 Price = p.Product.Price,
-                Quantity = p.Quantity
+                Quantity = p.Quantity,
             });
 
         public static CartViewModel ToCartView(this IEnumerable<OrderItemDTO> Items) => new()

@@ -6,7 +6,7 @@ using WebStore.Interfaces.Services;
 namespace WebStore.WebAPI.Controllers
 {
     [ApiController]
-    [Route("api/products")]
+    [Route("api/orders")]
     public class OrdersApiController : ControllerBase
     {
         private readonly IOrderService _orderService;
@@ -16,7 +16,7 @@ namespace WebStore.WebAPI.Controllers
             _orderService = orderService;
         }
 
-        [HttpGet("user/{UserName}")]
+        [HttpGet("user/{userName}")]
         public async Task<IActionResult> GetUserOrders(string userName)
         {
             var orders = await _orderService.GetUserOrders(userName);
@@ -34,7 +34,7 @@ namespace WebStore.WebAPI.Controllers
             return order is null ? NotFound() : Ok(order.ToDTO());
         }
 
-        [HttpPost("{UserName}")]
+        [HttpPost("{userName}")] // POST -> http://localhost:5001/api/orders/Ivanov
         public async Task<IActionResult> CreateOrder(string userName, [FromBody] CreateOrderDTO orderModel)
         {
             var order = await _orderService.CreateOrder(userName, orderModel.Items.ToCartView(), orderModel.Order);

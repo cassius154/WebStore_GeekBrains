@@ -13,7 +13,7 @@ namespace WebStore.WebAPI.Clients.Employees
 {
     public class EmployeesClient : ClientBase, IEmployeeService
     {
-        public EmployeesClient(HttpClient client, string address) : base(client, "api/employees") { }
+        public EmployeesClient(HttpClient client) : base(client, "api/employees") { }
 
         public IEnumerable<Employee> GetEmployeeList(Func<Employee, bool> predicate = null)
         {

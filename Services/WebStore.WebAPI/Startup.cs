@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -7,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.SwaggerGen;
 using WebStore.DAL.Context;
 using WebStore.Domain.Identity;
 using WebStore.Interfaces.Services;
@@ -82,7 +84,26 @@ namespace WebStore.WebAPI
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "WebStore.WebAPI", Version = "v1" });
+
+                //c.IncludeXmlComments("WebStore.Domain.xml"); // ошибка, файл в другом месте
+                //c.IncludeXmlComments("WebStore.WebAPI.xml");
+
+                const string webstore_api_xml = "WebStore.WebAPI.xml";
+                const string webstore_domain_xml = "WebStore.Domain.xml";
+                const string debug_path = "bin/debug/net5.0";
+
+                includeXmlComments(c, debug_path, webstore_api_xml);
+                includeXmlComments(c, debug_path, webstore_domain_xml);
             });
+
+            void includeXmlComments(SwaggerGenOptions c, string path, string fName)
+            {
+                if (File.Exists(fName))
+                    c.IncludeXmlComments(fName);
+                else if (File.Exists(Path.Combine(path, fName)))
+                    c.IncludeXmlComments(Path.Combine(path, fName));
+
+            }
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

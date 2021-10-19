@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading;
@@ -27,6 +28,10 @@ namespace WebStore.WebAPI.Clients.Base
                                                      //который нас сюда привел (id = 7)
                 .ConfigureAwait(false);  //с ConfigureAwait(false) будем брать любой thread
 
+            if (response.StatusCode == HttpStatusCode.NoContent)
+            {
+                return default;
+            }
             return await response
                 .EnsureSuccessStatusCode()
                 .Content

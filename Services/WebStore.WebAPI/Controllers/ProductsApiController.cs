@@ -1,13 +1,14 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using WebStore.Domain;
 using WebStore.Domain.DTO;
+using WebStore.Interfaces;
 using WebStore.Interfaces.Services;
 
 namespace WebStore.WebAPI.Controllers
 {
 
     [ApiController]
-    [Route("api/products")]
+    [Route(WebAPIAddresses.Products)]
     public class ProductsApiController : ControllerBase
     {
         private readonly IProductService _productService;
@@ -53,11 +54,16 @@ namespace WebStore.WebAPI.Controllers
             return Ok(products.ToDTO());
         }
 
+        //private record ProductDTO(int Id, string Name);
+
         [HttpGet("{id}")]
         public IActionResult GetProductById(int id)
         {
             var product = _productService.GetProductById(id);
             return product is null ? NotFound() : Ok(product.ToDTO());
+
+            //в случае использования records можно так, а не писать .ToDTO()
+            //return Ok(new ProductDTO(product.Id, product.Name));
         }
     }
 }

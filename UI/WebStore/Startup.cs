@@ -3,24 +3,20 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using WebStore.DAL.Context;
-using WebStore.Services.Data;
 using WebStore.Domain.Identity;
 using WebStore.Infrastructure.Conventions;
 using WebStore.Infrastructure.Middleware;
 using WebStore.Interfaces.Services;
-using WebStore.Services.Services.Cookies;
-using WebStore.Services.Services.Memory;
-using WebStore.Services.Services.SQL;
 using WebStore.Interfaces.TestAPI;
-using WebStore.WebAPI.Clients.Values;
+using WebStore.Services.Services.Cookies;
 using WebStore.WebAPI.Clients.Employees;
-using WebStore.WebAPI.Clients.Products;
+using WebStore.WebAPI.Clients.Identity;
 using WebStore.WebAPI.Clients.Orders;
+using WebStore.WebAPI.Clients.Products;
+using WebStore.WebAPI.Clients.Values;
 
 namespace WebStore
 {
@@ -35,34 +31,29 @@ namespace WebStore
 
         public void ConfigureServices(IServiceCollection services)
         {
-            var dbType = Configuration["DatabaseType"];
-            switch (dbType)
-            {
-                default: throw new InvalidOperationException($"Тип БД {dbType} не поддерживается.");
-
-                case "WebStoreSql":
-                    services.AddDbContext<WebStoreDbContext>(opt =>
-                        opt.UseSqlServer(Configuration.GetConnectionString(dbType)));
-                    break;
-                case "WebStoreSqlite":
-                    services.AddDbContext<WebStoreDbContext>(opt =>
-                        opt.UseSqlite(Configuration.GetConnectionString(dbType),
-                            //для Sqlite указываем еще библиотеку, откуда брать миграции
-                            o => o.MigrationsAssembly("WebStore.DAL.Sqlite")));
-                    break;
-                case "InMemory":
-                    services.AddDbContext<WebStoreDbContext>(opt =>
-                        opt.UseInMemoryDatabase("WebStore.db"));
-                    break;
-            }
-
             services.AddIdentity<User, Role>(/*opt => { opt. }*/)  //можно сконфигурить прямо тут
-                .AddEntityFrameworkStores<WebStoreDbContext>()    //указываем, каким способом хранить - посредством EF
+                .AddIdentityWebStoreWebAPIClients()
                 .AddDefaultTokenProviders();    //это пока неясно что
+
+
+            //можем разделить клиентов основных данных и Identity по разным адресам
+            //services.AddIdentityWebStoreWebAPIClients();
+            //services.AddHttpClient("WebStoreWebAPIIdentity", client => client.BaseAddress = new(Configuration["WebAPI"]))
+            //   .AddTypedClient<IUserStore<User>, UsersClient>()
+            //   .AddTypedClient<IUserRoleStore<User>, UsersClient>()
+            //   .AddTypedClient<IUserPasswordStore<User>, UsersClient>()
+            //   .AddTypedClient<IUserEmailStore<User>, UsersClient>()
+            //   .AddTypedClient<IUserPhoneNumberStore<User>, UsersClient>()
+            //   .AddTypedClient<IUserTwoFactorStore<User>, UsersClient>()
+            //   .AddTypedClient<IUserClaimStore<User>, UsersClient>()
+            //   .AddTypedClient<IUserLoginStore<User>, UsersClient>()
+            //   .AddTypedClient<IRoleStore<Role>, RolesClient>()
+            //    ;
+
             //конфигурим Identity
             services.Configure<IdentityOptions>(opt => 
             {
-#if true
+#if true  //например, DEBUG
                 //для отладочных целей ослабляем требования к паролю
                 opt.Password.RequireDigit = false;
                 opt.Password.RequireLowercase = false;
@@ -98,16 +89,7 @@ namespace WebStore
                 opt.SlidingExpiration = true;
             });
 
-            services.AddTransient<WebStoreDbInitializer>();
 
-            ////services.AddTransient<IEmployeeService, MemoryEmployeeService>();
-            ////services.AddScoped<IEmployeeService, MemoryEmployeeService>();
-            //services.AddSingleton<IEmployeeService, MemoryEmployeeService>();
-            ////services.AddScoped<IEmployeeService, DBEmployeeService>();
-
-            //services.AddScoped<IProductService, MemoryProductService>();
-            //services.AddScoped<IProductService, DBProductService>();
-            //services.AddScoped<IOrderService, DBOrderService>();
             services.AddScoped<ICartService, CookiesCartService>();
 
             //services.AddHttpClient<IValuesClient, ValuesClient>(client => client.BaseAddress = new Uri(Configuration["WebAPI"]));

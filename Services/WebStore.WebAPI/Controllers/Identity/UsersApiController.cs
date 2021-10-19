@@ -4,11 +4,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using WebStore.Interfaces;
 
 namespace WebStore.WebAPI.Controllers.Identity
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route(WebAPIAddresses.Identity.Users)]
     public class UsersApiController : ControllerBase
     {
     }

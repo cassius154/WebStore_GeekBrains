@@ -1,11 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using WebStore.Domain.Models;
+using WebStore.Interfaces;
 using WebStore.Interfaces.Services;
 
 namespace WebStore.WebAPI.Controllers
 {
     [ApiController]
-    [Route("api/employees")]  //если оставить "api/[controller]" - адрес будет api/employeesapi, а надо api/employees
+    [Route(WebAPIAddresses.Employees)]  //если оставить "api/[controller]" - адрес будет api/employeesapi, а надо api/employees
     public class EmployeesApiController : ControllerBase
     {
         private readonly IEmployeeService _employeeService;

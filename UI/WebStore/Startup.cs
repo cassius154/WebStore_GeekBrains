@@ -62,7 +62,7 @@ namespace WebStore
             //конфигурим Identity
             services.Configure<IdentityOptions>(opt => 
             {
-#if true
+#if true  //например, DEBUG
                 //для отладочных целей ослабляем требования к паролю
                 opt.Password.RequireDigit = false;
                 opt.Password.RequireLowercase = false;

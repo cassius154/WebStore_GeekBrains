@@ -7,7 +7,7 @@ using WebStore.Domain.Identity;
 
 namespace WebStore.DAL.Context
 {
-    public class WebStoreDbContext : IdentityDbContext<User, Role, Guid>
+    public class WebStoreDbContext : IdentityDbContext<User, Role, string>
     {
 
         public WebStoreDbContext(DbContextOptions<WebStoreDbContext> options)

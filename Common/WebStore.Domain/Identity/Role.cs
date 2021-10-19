@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace WebStore.Domain.Identity
 {
-    public class Role : IdentityRole<Guid>
+    public class Role : IdentityRole
     {
         public const string Administrators = "Administrators";
 

@@ -21,6 +21,7 @@ using WebStore.WebAPI.Clients.Values;
 using WebStore.WebAPI.Clients.Employees;
 using WebStore.WebAPI.Clients.Products;
 using WebStore.WebAPI.Clients.Orders;
+using WebStore.WebAPI.Clients.Identity;
 
 namespace WebStore
 {
@@ -57,8 +58,24 @@ namespace WebStore
             }
 
             services.AddIdentity<User, Role>(/*opt => { opt. }*/)  //можно сконфигурить прямо тут
-                .AddEntityFrameworkStores<WebStoreDbContext>()    //указываем, каким способом хранить - посредством EF
+                //.AddEntityFrameworkStores<WebStoreDbContext>()    //указываем, каким способом хранить - посредством EF
                 .AddDefaultTokenProviders();    //это пока неясно что
+
+
+            //можем разделить клиентов основных данных и Identity по разным адресам
+            //services.AddIdentityWebStoreWebAPIClients();
+            services.AddHttpClient("WebStoreWebAPIIdentity", client => client.BaseAddress = new(Configuration["WebAPI"]))
+               .AddTypedClient<IUserStore<User>, UsersClient>()
+               .AddTypedClient<IUserRoleStore<User>, UsersClient>()
+               .AddTypedClient<IUserPasswordStore<User>, UsersClient>()
+               .AddTypedClient<IUserEmailStore<User>, UsersClient>()
+               .AddTypedClient<IUserPhoneNumberStore<User>, UsersClient>()
+               .AddTypedClient<IUserTwoFactorStore<User>, UsersClient>()
+               .AddTypedClient<IUserClaimStore<User>, UsersClient>()
+               .AddTypedClient<IUserLoginStore<User>, UsersClient>()
+               .AddTypedClient<IRoleStore<Role>, RolesClient>()
+                ;
+
             //конфигурим Identity
             services.Configure<IdentityOptions>(opt => 
             {

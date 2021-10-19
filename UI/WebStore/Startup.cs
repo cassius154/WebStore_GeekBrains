@@ -41,18 +41,18 @@ namespace WebStore
 
 
             //можем разделить клиентов основных данных и Identity по разным адресам
-            //services.AddIdentityWebStoreWebAPIClients();
-            services.AddHttpClient("WebStoreWebAPIIdentity", client => client.BaseAddress = new(Configuration["WebAPI"]))
-               .AddTypedClient<IUserStore<User>, UsersClient>()
-               .AddTypedClient<IUserRoleStore<User>, UsersClient>()
-               .AddTypedClient<IUserPasswordStore<User>, UsersClient>()
-               .AddTypedClient<IUserEmailStore<User>, UsersClient>()
-               .AddTypedClient<IUserPhoneNumberStore<User>, UsersClient>()
-               .AddTypedClient<IUserTwoFactorStore<User>, UsersClient>()
-               .AddTypedClient<IUserClaimStore<User>, UsersClient>()
-               .AddTypedClient<IUserLoginStore<User>, UsersClient>()
-               .AddTypedClient<IRoleStore<Role>, RolesClient>()
-                ;
+            services.AddIdentityWebStoreWebAPIClients();
+            //services.AddHttpClient("WebStoreWebAPIIdentity", client => client.BaseAddress = new(Configuration["WebAPI"]))
+            //   .AddTypedClient<IUserStore<User>, UsersClient>()
+            //   .AddTypedClient<IUserRoleStore<User>, UsersClient>()
+            //   .AddTypedClient<IUserPasswordStore<User>, UsersClient>()
+            //   .AddTypedClient<IUserEmailStore<User>, UsersClient>()
+            //   .AddTypedClient<IUserPhoneNumberStore<User>, UsersClient>()
+            //   .AddTypedClient<IUserTwoFactorStore<User>, UsersClient>()
+            //   .AddTypedClient<IUserClaimStore<User>, UsersClient>()
+            //   .AddTypedClient<IUserLoginStore<User>, UsersClient>()
+            //   .AddTypedClient<IRoleStore<Role>, RolesClient>()
+            //    ;
 
             //конфигурим Identity
             services.Configure<IdentityOptions>(opt => 

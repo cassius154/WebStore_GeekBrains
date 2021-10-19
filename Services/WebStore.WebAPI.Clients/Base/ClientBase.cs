@@ -1,10 +1,11 @@
-﻿using System.Net.Http;
+﻿using System;
+using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
 
 namespace WebStore.WebAPI.Clients.Base
 {
-    public abstract class ClientBase
+    public abstract class ClientBase : IDisposable
     {
         protected HttpClient http { get; }
 
@@ -59,6 +60,41 @@ namespace WebStore.WebAPI.Clients.Base
             //почему-то тут не проверяем через EnsureSuccessStatusCode
             //можно проверить вручную через response.IsSuccessStatusCode
             return response;
+        }
+
+
+        //можно написать Dispose() как виртуальный, но тогда потомки могут разрушить логику базового класса
+        //такой шаблон обычно применяется для класса с наследниками
+        public void Dispose()
+        {
+            Dispose(true);
+            //GC.SuppressFinalize(this);  - указание GC, чо при сборке мусора этот Dispose вызывать не надо
+        }
+
+        //если бы писали деструктор (финализатор)
+        //можно было бы сделать так + GC.SuppressFinalize(this)
+        //но без лишней нужды писать деструктор не надо - замедляет работу класса и сборку мусора
+        //~BaseClient()
+        //{
+        //    Dispose(false);
+        //}
+
+        private bool _disposed;
+        protected virtual void Dispose(bool disposing)
+        {
+            if (_disposed)
+            {
+                return;
+            }
+            _disposed = true;
+
+            if (disposing)
+            {
+                // должны освободить управляемые ресурсы - т.е. вызвать Dispose() у всех IDisposable
+                //Http.Dispose(); // не мы создали, не нам и освобождать!
+            }
+
+            // должны освободить неуправляемые ресурсы
         }
     }
 }

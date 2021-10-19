@@ -3,25 +3,20 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using WebStore.DAL.Context;
-using WebStore.Services.Data;
 using WebStore.Domain.Identity;
 using WebStore.Infrastructure.Conventions;
 using WebStore.Infrastructure.Middleware;
 using WebStore.Interfaces.Services;
-using WebStore.Services.Services.Cookies;
-using WebStore.Services.Services.Memory;
-using WebStore.Services.Services.SQL;
 using WebStore.Interfaces.TestAPI;
-using WebStore.WebAPI.Clients.Values;
+using WebStore.Services.Services.Cookies;
 using WebStore.WebAPI.Clients.Employees;
-using WebStore.WebAPI.Clients.Products;
-using WebStore.WebAPI.Clients.Orders;
 using WebStore.WebAPI.Clients.Identity;
+using WebStore.WebAPI.Clients.Orders;
+using WebStore.WebAPI.Clients.Products;
+using WebStore.WebAPI.Clients.Values;
 
 namespace WebStore
 {
@@ -37,11 +32,12 @@ namespace WebStore
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddIdentity<User, Role>(/*opt => { opt. }*/)  //можно сконфигурить прямо тут
+                .AddIdentityWebStoreWebAPIClients()
                 .AddDefaultTokenProviders();    //это пока неясно что
 
 
             //можем разделить клиентов основных данных и Identity по разным адресам
-            services.AddIdentityWebStoreWebAPIClients();
+            //services.AddIdentityWebStoreWebAPIClients();
             //services.AddHttpClient("WebStoreWebAPIIdentity", client => client.BaseAddress = new(Configuration["WebAPI"]))
             //   .AddTypedClient<IUserStore<User>, UsersClient>()
             //   .AddTypedClient<IUserRoleStore<User>, UsersClient>()

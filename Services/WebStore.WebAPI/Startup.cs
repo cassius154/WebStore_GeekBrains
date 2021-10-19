@@ -11,7 +11,6 @@ using WebStore.DAL.Context;
 using WebStore.Domain.Identity;
 using WebStore.Interfaces.Services;
 using WebStore.Services.Data;
-using WebStore.Services.Services.Cookies;
 using WebStore.Services.Services.Memory;
 using WebStore.Services.Services.SQL;
 

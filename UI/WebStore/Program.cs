@@ -13,12 +13,6 @@ namespace WebStore
             var hostBuilder = CreateHostBuilder(args);
             var host = hostBuilder.Build();
             
-            using (var scope = host.Services.CreateScope())
-            {
-                var initializer = scope.ServiceProvider.GetRequiredService<WebStoreDbInitializer>();
-                await initializer.InitializeAsync();
-            }
-
             await host.RunAsync();
         }
 

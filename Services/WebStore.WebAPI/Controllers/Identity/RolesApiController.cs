@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
@@ -15,6 +16,8 @@ namespace WebStore.WebAPI.Controllers.Identity
     {
         private readonly RoleStore<Role> _roleStore;
 
+        //если вот так объявить - тогда можно User : IdentityUser<Guid>
+        //private readonly RoleStore<Role, WebStoreDbContext, Guid> _roleStore;
 
         public RolesApiController(WebStoreDbContext db)
         {

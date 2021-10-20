@@ -28,6 +28,9 @@ namespace WebStore.WebAPI.Controllers.Identity
         //так же поступить с Role
         //иначе _userStore объявить не удается
 
+        //если вот так объявить - тогда можно User : IdentityUser<Guid>
+        //private readonly UserStore<User, Role, WebStoreDbContext, Guid> _userStore;
+
         public UsersApiController(WebStoreDbContext db)
         {
             //_userStore = new UserStore<User, Role, WebStoreDbContext>(db);

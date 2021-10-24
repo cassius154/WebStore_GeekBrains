@@ -61,6 +61,7 @@ namespace WebStore.Services.Services.Memory
             emp.Id = ++_maxId;
 
             TestData.Employees.Add(emp);
+            _logger.LogInformation("Сотрудник {0} успешно добавлен", emp);
             return emp;
         }
 
@@ -85,18 +86,21 @@ namespace WebStore.Services.Services.Memory
                 e.BirthDate = emp.BirthDate;
             }
 
+            _logger.LogInformation("Сотрудник {0} успешно обновлён", e);
             return e;
         }
 
         public bool Delete(int id)
         {
             var e = GetEmployee(id);
-            if (e != null)
+            if (e is not null)
             {
                 TestData.Employees.Remove(e);
+                _logger.LogInformation("Сотрудник {0} успешно удалён", e);
                 return true;
             }
 
+            _logger.LogInformation("В процессе попытки удаления сотрудник с id:{0} не найден", id);
             return false;
         }
     }

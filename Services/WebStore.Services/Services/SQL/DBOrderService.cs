@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using WebStore.DAL.Context;
 using WebStore.Domain.Entities.Orders;
 using WebStore.Domain.Identity;
@@ -16,11 +17,14 @@ namespace WebStore.Services.Services.SQL
     {
         private readonly WebStoreDbContext _db;
         private readonly UserManager<User> _userManager;
+        private readonly ILogger<DBOrderService> _logger;
 
-        public DBOrderService(WebStoreDbContext db, UserManager<User> userManager)
+
+        public DBOrderService(WebStoreDbContext db, UserManager<User> userManager, ILogger<DBOrderService> logger)
         {
             _db = db;
             _userManager = userManager;
+            _logger = logger;
         }
 
         public async Task<Order> CreateOrder(string userName, CartViewModel cart, OrderViewModel orderModel)
@@ -32,47 +36,52 @@ namespace WebStore.Services.Services.SQL
                 throw new InvalidOperationException($"Пользователь {userName} не найден");
             }
 
-            //новый синтаксис - без блока {}
-            //await using (var tx = await _db.Database.BeginTransactionAsync()) {}
-            await using var tx = await _db.Database.BeginTransactionAsync();
+            using (_logger.BeginScope("Формирование заказа для {0}", userName))
+            {
+                //новый синтаксис - без блока {}
+                //await using (var tx = await _db.Database.BeginTransactionAsync()) {}
+                await using var tx = await _db.Database.BeginTransactionAsync();
 
-            //создаем Order
-            var order = new Order
-            { 
-                User = user,
-                Address = orderModel.Address,
-                Phone = orderModel.Phone,
-                Description = orderModel.Description,
-            };
-
-
-            //создаем Items
-            //берем id-шники продуктов из корзины
-            var pIds = cart.Items.Select(i => i.Product.Id);
-            //по этим id-шникам тянем продукты из базы
-            var cartProducts = await _db.Products
-                .Where(p => pIds.Contains(p.Id))
-                .ToArrayAsync();
-            //джойним продукты из корзины с продуктами из базы по Id
-            order.Items = cart.Items.Join(
-                cartProducts,
-                cartItem => cartItem.Product.Id,  //продукты из корзины
-                cartProduct => cartProduct.Id,    //продукты из БД - джойним по Id
-                (cartItem, cartProduct) => new OrderItem
+                //создаем Order
+                var order = new Order
                 {
-                    Order = order,  //созданный order
-                    Product = cartProduct,
-                    Price = cartProduct.Price,     //цена из БД - тут можно добавить скидку
-                    Quantity = cartItem.Quantity,  //кол-во из корзины
-                }).ToArray();
+                    User = user,
+                    Address = orderModel.Address,
+                    Phone = orderModel.Phone,
+                    Description = orderModel.Description,
+                };
 
-            await _db.Orders.AddAsync(order);
-            //await _db.Set<OrderItem>().AddRangeAsync(order.Items);  //нет необходимости - _db.Orders.AddAsync(order) сам все добавит
-            await _db.SaveChangesAsync();
 
-            await tx.CommitAsync();
+                //создаем Items
+                //берем id-шники продуктов из корзины
+                var pIds = cart.Items.Select(i => i.Product.Id);
+                //по этим id-шникам тянем продукты из базы
+                var cartProducts = await _db.Products
+                    .Where(p => pIds.Contains(p.Id))
+                    .ToArrayAsync();
+                //джойним продукты из корзины с продуктами из базы по Id
+                order.Items = cart.Items.Join(
+                    cartProducts,
+                    cartItem => cartItem.Product.Id,  //продукты из корзины
+                    cartProduct => cartProduct.Id,    //продукты из БД - джойним по Id
+                    (cartItem, cartProduct) => new OrderItem
+                    {
+                        Order = order,  //созданный order
+                        Product = cartProduct,
+                        Price = cartProduct.Price,     //цена из БД - тут можно добавить скидку
+                        Quantity = cartItem.Quantity,  //кол-во из корзины
+                    }).ToArray();
 
-            return order;
+                await _db.Orders.AddAsync(order);
+                //await _db.Set<OrderItem>().AddRangeAsync(order.Items);  //нет необходимости - _db.Orders.AddAsync(order) сам все добавит
+                await _db.SaveChangesAsync();
+
+                await tx.CommitAsync();
+
+                _logger.LogInformation("Заказ id:{0} успешно сформирован для пользователя {1}", order.Id, userName);
+
+                return order;
+            }
         }
 
         public async Task<Order> GetOrderById(int id)

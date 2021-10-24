@@ -49,6 +49,8 @@ namespace WebStore.Domain.Models
         //{
         //    return e1.Id != e2.Id;
         //}
+
+        public override string ToString() => $"[{Id}] {LastName} {FirstName} {Patronymic} ({BirthDate})";
     }
 
     //public record Employee2(int id, string FirstName, string LastName, string Patronymic, DateTime BirthDate);

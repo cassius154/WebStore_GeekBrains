@@ -130,8 +130,10 @@ namespace WebStore
 
             //app.UseWelcomePage();
             //app.UseWelcomePage("/welcome");
-            
+
             //app.UseStatusCodePagesWithReExecute("/Home/Status/{0}");
+
+            app.UseMiddleware<ExceptionHandlingMiddleware>();
 
             app.UseEndpoints(endpoints =>
             {

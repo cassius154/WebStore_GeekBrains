@@ -13,10 +13,10 @@ namespace WebStore.Controllers
         private readonly IProductService _productService;
         private readonly ILogger<CatalogController> _logger;
 
-        public CatalogController(IProductService productService, ILogger<CatalogController> logger)
+        public CatalogController(IProductService productService) //, ILogger<CatalogController> logger)
         {
             _productService = productService;
-            _logger = logger;
+            //_logger = logger;
         }
 
         public IActionResult Index(int? brandId, int? sectionId)

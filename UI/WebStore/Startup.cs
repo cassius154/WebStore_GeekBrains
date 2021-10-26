@@ -13,6 +13,7 @@ using WebStore.Infrastructure.Middleware;
 using WebStore.Interfaces.Services;
 using WebStore.Interfaces.TestAPI;
 using WebStore.Logger;
+using WebStore.Services.Services;
 using WebStore.Services.Services.Cookies;
 using WebStore.WebAPI.Clients.Employees;
 using WebStore.WebAPI.Clients.Identity;
@@ -92,7 +93,10 @@ namespace WebStore
             });
 
 
-            services.AddScoped<ICartService, CookiesCartService>();
+            //провели декомпозицию сервиса корзины для тестов
+            //services.AddScoped<ICartService, CookiesCartService>();
+            services.AddScoped<ICartStore, CookiesCartStore>();
+            services.AddScoped<ICartService, CartService>();
 
             //services.AddHttpClient<IValuesClient, ValuesClient>(client => client.BaseAddress = new Uri(Configuration["WebAPI"]));
             services.AddHttpClient("WebStoreWebAPI", client => client.BaseAddress = new(Configuration["WebAPI"]))

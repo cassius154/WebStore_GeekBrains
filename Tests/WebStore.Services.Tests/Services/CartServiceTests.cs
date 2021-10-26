@@ -96,7 +96,7 @@ namespace WebStore.Services.Tests.Services
         }
 
         [TestMethod]
-        public void CartViewModel_Returns_Correct_ItemsCount()
+        public void CartViewModelReturnsCorrectItemsCount()
         {
             var cartViewModel = new CartViewModel
             {
@@ -115,7 +115,7 @@ namespace WebStore.Services.Tests.Services
         }
 
         [TestMethod]
-        public void CartViewModel_Returns_Correct_TotalPrice()
+        public void CartViewModelReturnsCorrectTotalPrice()
         {
             var cartViewModel = new CartViewModel
             {
@@ -132,5 +132,91 @@ namespace WebStore.Services.Tests.Services
 
             Assert.Equal(expectedTotalPrice, actualTotalPrice);
         }
+
+        [TestMethod]
+        public void CartServiceAddWorkCorrect()
+        {
+            _cart.Items.Clear();
+
+            const int expectedId = 5;
+            const int expectedItemsCount = 1;
+
+            _cartService.Add(expectedId);
+
+            var actualItemsCount = _cart.ItemsCount;
+
+            Assert.Equal(expectedItemsCount, actualItemsCount);
+
+            Assert.Single(_cart.Items);
+
+            Assert.Equal(expectedId, _cart.Items.Single().ProductId);
+            //Assert.Equal(expectedId, _cart.Items.ElementAt(0).ProductId);
+        }
+
+        [TestMethod]
+        public void CartServiceRemoveCorrectItem()
+        {
+            const int itemId = 1;
+            const int expectedProductId = 2;
+
+            _cartService.Remove(itemId);
+
+            Assert.Single(_cart.Items);
+
+            Assert.Equal(expectedProductId, _cart.Items.Single().ProductId);
+        }
+
+        [TestMethod]
+        public void CartServiceClearClearCart()
+        {
+            _cartService.Clear();
+
+            Assert.Empty(_cart.Items);
+        }
+
+        [TestMethod]
+        public void CartServiceDecrementCorrect()
+        {
+            const int itemId = 2;
+
+            const int expectedQuantity = 2;
+            const int expectesItemsCount = 3;
+            const int expectedProductsCount = 2;
+
+            _cartService.Decrement(itemId);
+
+            Assert.Equal(expectesItemsCount, _cart.ItemsCount);
+            Assert.Equal(expectedProductsCount, _cart.Items.Count);
+
+            var items = _cart.Items.ToArray();
+            Assert.Equal(itemId, items[1].ProductId);
+            Assert.Equal(expectedQuantity, items[1].Quantity);
+        }
+
+        [TestMethod]
+        public void CartServiceRemoveItemWhenDecrementTo_0()
+        {
+            const int itemId = 1;
+            const int expectedItemsCount = 3;
+
+            _cartService.Decrement(itemId);
+
+            Assert.Equal(expectedItemsCount, _cart.ItemsCount);
+            Assert.Single(_cart.Items);
+        }
+
+        [TestMethod]
+        public void CartServiceGetViewModelWorkCorrect()
+        {
+            const int expectedItemsCount = 4;
+            const decimal expectedFirstProductPrice = 1.1m;
+
+            var result = _cartService.GetViewModel();
+
+            Assert.Equal(expectedItemsCount, result.ItemsCount);
+
+            Assert.Equal(expectedFirstProductPrice, result.Items.First().Product.Price);
+        }
+
     }
 }

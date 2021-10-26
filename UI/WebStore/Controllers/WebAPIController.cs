@@ -1,8 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using WebStore.Interfaces.TestAPI;
 
 namespace WebStore.Controllers
@@ -16,6 +12,9 @@ namespace WebStore.Controllers
         public IActionResult Index()
         {
             var values = _valuesClient.GetAll();
+            //тут тест провалится, поскольку мы там проверяем valuesClientMock.VerifyNoOtherCalls();
+            //(ничего кроме GetAll())
+            //var c = _valuesClient.Count();
             return View(values);
         }
     }

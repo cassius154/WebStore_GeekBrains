@@ -52,9 +52,10 @@ namespace WebStore.Controllers
                     UserName = model.UserName,
                 };
 
+                //_logger.LogInformation($"Регистрация пользователя {user.UserName}"); // интерполяцию не делать!
                 //_logger.LogInformation("Регистрация пользователя {0}", user.UserName);
                 _logger.LogInformation("Регистрация пользователя {UserName}", user.UserName); //можно так
-                                                                                              //_logger.LogInformation($"Регистрация пользователя {user.UserName}"); // так не делать!
+                                                                                              
                 var regResult = await _userManager.CreateAsync(user, model.Password);
                 if (regResult.Succeeded)
                 {

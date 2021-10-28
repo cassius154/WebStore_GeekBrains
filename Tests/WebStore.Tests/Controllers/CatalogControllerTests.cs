@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using WebStore.Controllers;
@@ -30,8 +31,8 @@ namespace WebStore.Tests.Controllers
             const string expectedSectionName = "Test section";
             const int expectedSectionOrder = 123;
 
-            var productDataMock = new Mock<IProductService>();
-            productDataMock
+            var productServiceMock = new Mock<IProductService>();
+            productServiceMock
                //.Setup(s => s.GetProductById(It.IsAny<int>()))
                .Setup(s => s.GetProductById(It.Is<int>(id => id > 0)))
                .Returns<int>(id => new Product
@@ -57,7 +58,8 @@ namespace WebStore.Tests.Controllers
                    }
                });
 
-            var controller = new CatalogController(productDataMock.Object);
+            var loggerMock = new Mock<ILogger<CatalogController>>();
+            var controller = new CatalogController(productServiceMock.Object, loggerMock.Object);
 
             var result = controller.Details(expectedId);
 
@@ -72,8 +74,8 @@ namespace WebStore.Tests.Controllers
             Assert.Equal(expectedBrandName, model.Brand);
             Assert.Equal(expectedSectionName, model.Section);
 
-            productDataMock.Verify(s => s.GetProductById(It.Is<int>(id => id > 0)));
-            productDataMock.VerifyNoOtherCalls();
+            productServiceMock.Verify(s => s.GetProductById(It.Is<int>(id => id > 0)));
+            productServiceMock.VerifyNoOtherCalls();
         }
     }
 }

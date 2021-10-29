@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -14,6 +15,8 @@ namespace WebStore.TagHelpers
     public class ActiveRoute : TagHelper
     {
         private const string _attributeName = "ws-is-active-route";
+        
+        private const string _ignoreAction = "ws-ignore-action";
 
         [HtmlAttributeName("ws-active-route-class")]
         public string ActiveCssClass { get; set; } = "active";
@@ -37,7 +40,10 @@ namespace WebStore.TagHelpers
 
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
-            if (_isActive())
+            //если вернется true - значит атрибут там был, и передаем это дальше
+            var isIgnoreAction = output.Attributes.RemoveAll(_ignoreAction);
+
+            if (_isActive(isIgnoreAction))
             {
                 _makeActive(output);
             }
@@ -45,7 +51,7 @@ namespace WebStore.TagHelpers
             output.Attributes.RemoveAll(_attributeName);
         }
 
-        private bool _isActive()
+        private bool _isActive(bool ignoreAction)
         {
             //здесь то, что приходит из адресной строки браузера
             var routeValues = ViewContext.RouteData.Values;
@@ -60,7 +66,7 @@ namespace WebStore.TagHelpers
             //}
 
             //то же в новом синтаксисе
-            if (Action is { Length: > 0 } action && !string.Equals(action, routeAction))
+            if (!ignoreAction && Action is { Length: > 0 } action && !string.Equals(action, routeAction))
             {
                 return false;
             }

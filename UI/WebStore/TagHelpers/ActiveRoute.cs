@@ -15,6 +15,9 @@ namespace WebStore.TagHelpers
     {
         private const string _attributeName = "ws-is-active-route";
 
+        [HtmlAttributeName("ws-active-route-class")]
+        public string ActiveCssClass { get; set; } = "active";
+
         [HtmlAttributeName("asp-controller")]
         public string Controller { get; set; }
 
@@ -34,8 +37,74 @@ namespace WebStore.TagHelpers
 
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
-            
+            if (_isActive())
+            {
+                _makeActive(output);
+            }
+
             output.Attributes.RemoveAll(_attributeName);
+        }
+
+        private bool _isActive()
+        {
+            //здесь то, что приходит из адресной строки браузера
+            var routeValues = ViewContext.RouteData.Values;
+            var routeController = routeValues["controller"]?.ToString();
+            var routeAction = routeValues["action"]?.ToString();
+
+            //если действие в ссылке указано (HtmlAttributeName("asp-action"))
+            //и оно не совпадает с тем, что указано в пришедшем маршруте (адресной строке) - false
+            //if (!string.IsNullOrEmpty(Action) && !string.Equals(Action, routeAction))
+            //{
+            //    return false;
+            //}
+
+            //то же в новом синтаксисе
+            if (Action is { Length: > 0 } action && !string.Equals(action, routeAction))
+            {
+                return false;
+            }
+
+            //если контроллер в ссылке указан  HtmlAttributeName("asp-controller")
+            //и он не совпадает с тем, что указан в пришедшем маршруте (адресной строке) - false
+            if (Controller is { Length: > 0 } controller && !string.Equals(controller, routeController))
+            {
+                return false;
+            }
+
+            //теперь мы должны взять все содержимое словаря, составленного из атрибутов asp-route-
+            //и сравнить его с тем, что указано в пришедшем из адресной строки маршруте (ViewContext - routeValues) -  
+            //в RouteValues те части запроса, что указано в ссылке в атрибутах asp-route-
+            foreach (var (key, value) in RouteValues)
+            {
+                //если пришедший маршрут не включает key из атрибутов asp-route-
+                //или значения в пришедшем маршруте и прописанном в текущей ссылке не равны - false
+                if (!routeValues.ContainsKey(key) || routeValues[key]?.ToString() != value)
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        private void _makeActive(TagHelperOutput output)
+        {
+            var classAttribute = output.Attributes.FirstOrDefault(attr => attr.Name == "class");
+
+            if (classAttribute is null)
+            {
+                output.Attributes.Add("class", ActiveCssClass);
+            }
+            else
+            {
+                if (classAttribute.Value?.ToString()?.Contains(ActiveCssClass) ?? false)
+                {
+                    return;
+                }
+
+                output.Attributes.SetAttribute("class", $"{classAttribute.Value} {ActiveCssClass}");
+            }
         }
     }
 }

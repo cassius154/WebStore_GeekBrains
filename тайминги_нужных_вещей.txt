@@ -138,8 +138,8 @@ https://gb.ru/lessons/180792
 https://gb.ru/lessons/180793
 
 
-https://docs.microsoft.com/ru-ru/aspnet/core/test/integration-tests?view=aspnetcore-5.0
-https://habr.com/ru/post/273807/
+https://docs.microsoft.com/ru-ru/aspnet/core/test/integration-tests?view=aspnetcore-5.0 - интеграционные тесты
+https://habr.com/ru/post/273807/  - библиотеки для парсинга HTML
 https://youtu.be/u9i2vc-FetE  тут про Automapper что-то есть
 
 

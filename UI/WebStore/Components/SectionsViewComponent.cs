@@ -15,7 +15,7 @@ namespace WebStore.Components
             _prodData = prodData;
         }
 
-        public IViewComponentResult Invoke()
+        public IViewComponentResult Invoke(string sectionId)
         {
             var sections = _prodData.GetSections();
             var parents = sections.Where(s => s.ParentId is null);

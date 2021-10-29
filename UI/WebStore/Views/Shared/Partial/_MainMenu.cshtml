@@ -1,6 +1,6 @@
 ﻿<div class="mainmenu pull-left">
     <ul class="nav navbar-nav collapse navbar-collapse">
-        <li><a asp-controller="Home" asp-action="Index" class="active">Главная</a></li>
+        <li><a asp-controller="Home" asp-action="Index" class="@IsActive("Home")">Главная</a></li>
         <li class="dropdown">
             <a href="#">Магазин<i class="fa fa-angle-down"></i></a>
             <ul role="menu" class="sub-menu">
@@ -21,7 +21,16 @@
         <li><a asp-controller="Home" asp-action="NotFoundPage">404</a></li>
         <li><a asp-controller="Home" asp-action="ContactUs">Контакты</a></li>
         <li><a asp-controller="Employees" asp-action="Index">Сотрудники</a></li>
-        <li><a asp-controller="WebAPI" asp-action="Index">WebAPI</a></li>
+        <li><a asp-controller="WebAPI" asp-action="Index" class="@IsActive("WebAPI")">WebAPI</a></li>
 
     </ul>
 </div>
+
+@functions
+{
+    string IsActive(string Controller, string Action = "Index") =>
+        Equals(ViewContext.RouteData.Values["controller"], Controller) &&
+        Equals(ViewContext.RouteData.Values["action"], Action)
+            ? "active"
+            : null;
+}

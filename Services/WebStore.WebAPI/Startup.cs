@@ -98,7 +98,7 @@ namespace WebStore.WebAPI
                 includeXmlComments(c, debug_path, webstore_domain_xml);
             });
 
-            void includeXmlComments(SwaggerGenOptions c, string path, string fName)
+            static void includeXmlComments(SwaggerGenOptions c, string path, string fName)
             {
                 if (File.Exists(fName))
                     c.IncludeXmlComments(fName);

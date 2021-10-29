@@ -15,7 +15,11 @@ namespace WebStore.Components
 
         //public async Task<IViewComponentResult> InvokeAsync() => View();  //можно и асинхронный 
 
-        public IViewComponentResult Invoke() => View(_getBrands());
+        public IViewComponentResult Invoke(string brandId)
+{
+            ViewBag.BrandId = int.TryParse(brandId, out var id) ? id : (int?)null;
+            return View(_getBrands());
+        }
 
         private IEnumerable<BrandViewModel> _getBrands() => 
             _prodData.GetBrands()

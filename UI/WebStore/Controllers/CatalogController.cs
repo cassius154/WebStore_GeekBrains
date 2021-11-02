@@ -5,28 +5,39 @@ using WebStore.Domain;
 using WebStore.Domain.ViewModels;
 using WebStore.Services.DTO;
 using WebStore.Interfaces.Services;
+using Microsoft.Extensions.Configuration;
 
 namespace WebStore.Controllers
 {
     public class CatalogController : Controller
     {
         private readonly IProductService _productService;
+        private readonly IConfiguration _configuration;
         private readonly ILogger<CatalogController> _logger;
 
-        public CatalogController(IProductService productService, ILogger<CatalogController> logger)
+        public CatalogController(IProductService productService,
+            IConfiguration configuration,
+            ILogger<CatalogController> logger)
         {
             _productService = productService;
+            _configuration = configuration;
             _logger = logger;
         }
 
-        public IActionResult Index(int? brandId, int? sectionId)
+        public IActionResult Index(int? brandId, int? sectionId, int page = 1, int? pageSize = null)
         {
+            var pSize = pageSize
+                ?? (int.TryParse(_configuration["CatalogPageSize"], out var value) ? value : null);
+
             var filter = new ProductFilter
             {
                 BrandId = brandId,
                 SectionId = sectionId,
+                Page = page,
+                PageSize = pSize,
             };
-            var products = _productService.GetProducts(filter);
+
+            var (products, totalСount) = _productService.GetProducts(filter);
 
             var model = new CatalogViewModel
             {

@@ -5,6 +5,7 @@ using WebStore.DAL.Context;
 using WebStore.Domain;
 using WebStore.Domain.Entities;
 using WebStore.Interfaces.Services;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace WebStore.Services.Services.SQL
 {
@@ -42,7 +43,7 @@ namespace WebStore.Services.Services.SQL
                 .FirstOrDefault(p => p.Id == id);
         }
 
-        public IEnumerable<Product> GetProducts(ProductFilter filter = null)
+        public ProductsPage GetProducts(ProductFilter filter = null)
         {
             IQueryable<Product> ret = _db.Products
                 .Include(p => p.Section)
@@ -65,7 +66,18 @@ namespace WebStore.Services.Services.SQL
                 }
             }
 
-            return ret.AsNoTracking(); //.ToList();
+            var totalCount = ret.Count();
+            //if (filter?.PageSize > 0 && filter?.Page > 0)
+            if (filter is { PageSize: > 0 and var pageSize, Page: > 0 and var pageNumber })
+            {
+                ret = ret
+                   .Skip((pageNumber - 1) * pageSize)
+                   .Take(pageSize);
+            }
+
+            //return ret.AsNoTracking(); //.ToList();
+            //return new(ret.AsNoTracking().AsEnumerable(), totalCount);
+            return new(ret.AsNoTracking(), totalCount);
         }
 
 

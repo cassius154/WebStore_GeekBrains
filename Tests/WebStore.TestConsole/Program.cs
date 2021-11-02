@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net.Http;
+using System.Threading.Tasks;
 using WebStoreClient;
 
 namespace WebStore.TestConsole
@@ -40,7 +41,7 @@ namespace WebStore.TestConsole
         //    public int Age { get; set; }
         //}
 
-        static async void Main(string[] args)
+        static async Task Main(string[] args)
         {
 
             //swaggerClient.cs лежит в каталоге obj/
@@ -55,7 +56,7 @@ namespace WebStore.TestConsole
 
             //тут разобраться - тут возвращается void (Task)
             //var products = 
-                await api.ProductsAsync(new ProductFilter());
+                //await api.ProductsAsync(new ProductFilter());
 
             var employee = await api.Employees4Async(2);
 

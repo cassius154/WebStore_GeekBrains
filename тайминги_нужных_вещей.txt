@@ -1,3 +1,5 @@
+cassius154@users.noreply.github.com
+
 Уровеень 1
 https://gb.ru/courses/55
 
@@ -147,9 +149,16 @@ https://youtu.be/u9i2vc-FetE  тут про Automapper что-то есть
 0:21:45  - настройка GitHub на проверку обновления пакетов
 2:18:43  - пакеты/middleware для создания SiteMap
 
+Сайт getootstrap.com - оттуда можно качать макеты сайтов (раздел Examples/Snippets (отдельные части) или Examples/CustomComponents (целые макеты))
 
 ==========================================================================
 Урок 7
+https://gb.ru/lessons/180794
+
+https://github.com/Infarh/SportsStore/blob/dev/UI/SportsStore/Views/Catalog/Partial/_Pagination.cshtml
 
 
-Показать автоматическую реалзацию клиентов с помощью Swagger
+
+==========================================================================
+Урок 8
+

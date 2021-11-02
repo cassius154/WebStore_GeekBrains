@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Net.Http;
+using WebStoreClient;
 
 namespace WebStore.TestConsole
 {
@@ -38,8 +40,30 @@ namespace WebStore.TestConsole
         //    public int Age { get; set; }
         //}
 
-        static void Main(string[] args)
+        static async void Main(string[] args)
         {
+
+            //swaggerClient.cs лежит в каталоге obj/
+            var client = new HttpClient()
+            {
+                //BaseAddress = new Uri("http://localhost:5001")
+            };
+
+            //namespace и имя класса такие, какие указали при генерации
+            //(Dependencies - ПКМ - Manage Connected Services - Service References OpenAPI)
+            var api = new WebStoreClient.WebAPIClient("http://localhost:5001", client);
+
+            //тут разобраться - тут возвращается void (Task)
+            //var products = 
+                await api.ProductsAsync(new ProductFilter());
+
+            var employee = await api.Employees4Async(2);
+
+
+            //======================================================================
+            //  records tests
+            //======================================================================
+
             //var s1 = new Student
             //{
             //    LastName = "Last1",

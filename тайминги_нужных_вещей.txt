@@ -155,7 +155,9 @@ https://youtu.be/u9i2vc-FetE  тут про Automapper что-то есть
 Урок 7
 https://gb.ru/lessons/180794
 
-https://github.com/Infarh/SportsStore/blob/dev/UI/SportsStore/Views/Catalog/Partial/_Pagination.cshtml
+https://habr.com/ru/company/dododev/blog/503376/   //повышение надежности клиентов для отказоустойчивого взаимодействия с WebAPI-сервисами
+
+https://github.com/Infarh/SportsStore/blob/dev/UI/SportsStore/Views/Catalog/Partial/_Pagination.cshtml  //пример постраничного вывода
 
 
 

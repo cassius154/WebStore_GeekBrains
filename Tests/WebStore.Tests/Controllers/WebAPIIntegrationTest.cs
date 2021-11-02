@@ -10,6 +10,8 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using WebStore.Domain.ViewModels;
+using WebStore.Interfaces.Services;
 using WebStore.Interfaces.TestAPI;
 using Assert = Xunit.Assert;
 
@@ -28,15 +30,20 @@ namespace WebStore.Tests.Controllers
             var valuesServiceMock = new Mock<IValuesClient>();
             valuesServiceMock.Setup(s => s.GetAll()).Returns(_expectedValues);
 
+            var cartServiceMock = new Mock<ICartService>();
+            cartServiceMock.Setup(s => s.GetViewModel()).Returns(new CartViewModel { });
+
             //здесь мы по сути подменяем конфигурирование в
             //public static IHostBuilder CreateHostBuilder(string[] args) класса Program
             _host = new WebApplicationFactory<Startup>()
                .WithWebHostBuilder(host => host
                    .ConfigureServices(services => services
-                       .AddSingleton(valuesServiceMock.Object)));  //внедряем псевдоклиента в главный WebStore
+                       .AddSingleton(valuesServiceMock.Object)  //внедряем псевдоклиента в главный WebStore
+                       .AddSingleton(cartServiceMock.Object)));  
+                       
         }
 
-        [TestMethod, Ignore]
+        [TestMethod]
         public async Task GetValues()
         {
             var client = _host.CreateClient();

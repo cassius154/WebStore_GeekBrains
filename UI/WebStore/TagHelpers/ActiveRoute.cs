@@ -18,6 +18,9 @@ namespace WebStore.TagHelpers
         
         private const string _ignoreAction = "ws-ignore-action";
 
+        private const string _ignoreController = "ws-ignore-controller";
+
+
         [HtmlAttributeName("ws-active-route-class")]
         public string ActiveCssClass { get; set; } = "active";
 
@@ -42,8 +45,9 @@ namespace WebStore.TagHelpers
         {
             //если вернется true - значит атрибут там был, и передаем это дальше
             var isIgnoreAction = output.Attributes.RemoveAll(_ignoreAction);
+            var isIgnoreController = output.Attributes.RemoveAll(_ignoreController);
 
-            if (_isActive(isIgnoreAction))
+            if (_isActive(isIgnoreAction, isIgnoreController))
             {
                 _makeActive(output);
             }
@@ -51,7 +55,7 @@ namespace WebStore.TagHelpers
             output.Attributes.RemoveAll(_attributeName);
         }
 
-        private bool _isActive(bool ignoreAction)
+        private bool _isActive(bool ignoreAction, bool ignoreController)
         {
             //здесь то, что приходит из адресной строки браузера
             var routeValues = ViewContext.RouteData.Values;
@@ -73,7 +77,7 @@ namespace WebStore.TagHelpers
 
             //если контроллер в ссылке указан  HtmlAttributeName("asp-controller")
             //и он не совпадает с тем, что указан в пришедшем маршруте (адресной строке) - false
-            if (Controller is { Length: > 0 } controller && !string.Equals(controller, routeController))
+            if (!ignoreController && Controller is { Length: > 0 } controller && !string.Equals(controller, routeController))
             {
                 return false;
             }

@@ -6,6 +6,7 @@ using WebStore.Domain.ViewModels;
 using WebStore.Services.DTO;
 using WebStore.Interfaces.Services;
 using Microsoft.Extensions.Configuration;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace WebStore.Controllers
 {
@@ -37,15 +38,23 @@ namespace WebStore.Controllers
                 PageSize = pSize,
             };
 
-            var (products, totalСount) = _productService.GetProducts(filter);
+            var (products, totalCount) = _productService.GetProducts(filter);
 
             var model = new CatalogViewModel
             {
                 BrandId = brandId,
                 SectionId = sectionId,
+                
                 Products = products
                     .OrderBy(p => p.Order)
-                    .ToProductView()
+                    .ToProductView(),
+                
+                PageViewModel = new()
+                {
+                    Page = page,
+                    PageSize = pSize ?? 0,
+                    TotalItems = totalCount,
+                }
             };
 
             return View(model);

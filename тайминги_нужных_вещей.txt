@@ -163,6 +163,13 @@ https://github.com/Infarh/SportsStore/blob/dev/UI/SportsStore/Views/Catalog/Part
 0:43:26  - генерация клиентов WebAPI с помощью swagger
 
 
+http://localhost:5001/swagger/v1/swagger.json
+
+
+
+
 ==========================================================================
 Урок 8
+
+
 

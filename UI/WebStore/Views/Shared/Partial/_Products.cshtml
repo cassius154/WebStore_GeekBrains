@@ -21,7 +21,9 @@
                                 @product.Name
                             </a>
                         </p>
-                        <a asp-controller="Cart" asp-action="Add" asp-route-id="@product.Id" class="btn btn-default add-to-cart">
+                        <a asp-controller="Cart" asp-action="Add" asp-route-id="@product.Id"
+                           class="btn btn-default add-to-cart"
+                           data-id="@product.Id">
                             <i class="fa fa-shopping-cart"></i>В корзину
                         </a>
                     </div>
@@ -37,7 +39,9 @@
                                     @product.Name
                                 </a>
                             </p>
-                            <a asp-controller="Cart" asp-action="Add" asp-route-id="@product.Id" class="btn btn-default add-to-cart">
+                            <a asp-controller="Cart" asp-action="Add" asp-route-id="@product.Id"
+                               class="btn btn-default add-to-cart"
+                               data-id="@product.Id">
                                 <i class="fa fa-shopping-cart"></i>В корзину
                             </a>
                         </div>

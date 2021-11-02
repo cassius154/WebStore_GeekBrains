@@ -36,7 +36,7 @@ namespace WebStore.Tests.Controllers
                        .AddSingleton(valuesServiceMock.Object)));  //внедряем псевдоклиента в главный WebStore
         }
 
-        [TestMethod]
+        [TestMethod, Ignore]
         public async Task GetValues()
         {
             var client = _host.CreateClient();

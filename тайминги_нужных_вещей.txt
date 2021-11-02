@@ -1,3 +1,5 @@
+cassius154@users.noreply.github.com
+
 Уровеень 1
 https://gb.ru/courses/55
 
@@ -147,9 +149,27 @@ https://youtu.be/u9i2vc-FetE  тут про Automapper что-то есть
 0:21:45  - настройка GitHub на проверку обновления пакетов
 2:18:43  - пакеты/middleware для создания SiteMap
 
+Сайт getootstrap.com - оттуда можно качать макеты сайтов (раздел Examples/Snippets (отдельные части) или Examples/CustomComponents (целые макеты))
 
 ==========================================================================
 Урок 7
+https://gb.ru/lessons/180794
+
+https://habr.com/ru/company/dododev/blog/503376/   //повышение надежности клиентов для отказоустойчивого взаимодействия с WebAPI-сервисами
+
+https://github.com/Infarh/SportsStore/blob/dev/UI/SportsStore/Views/Catalog/Partial/_Pagination.cshtml  //пример пейджинга на основе частичного представления 
 
 
-Показать автоматическую реалзацию клиентов с помощью Swagger
+0:43:26  - генерация клиентов WebAPI с помощью swagger
+
+
+http://localhost:5001/swagger/v1/swagger.json
+
+
+
+
+==========================================================================
+Урок 8
+
+
+

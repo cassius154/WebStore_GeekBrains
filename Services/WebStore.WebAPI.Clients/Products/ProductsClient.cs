@@ -32,11 +32,11 @@ namespace WebStore.WebAPI.Clients.Products
             return product.FromDTO();
         }
 
-        public IEnumerable<Product> GetProducts(ProductFilter filter = null)
+        public ProductsPage GetProducts(ProductFilter filter = null)
         {
             var response = Post(address, filter ?? new());
-            var products_dtos = response.Content.ReadFromJsonAsync<IEnumerable<ProductDTO>>().Result;
-            return products_dtos.FromDTO();
+            var productsDTO = response.Content.ReadFromJsonAsync<ProductsPageDTO>().Result;
+            return productsDTO.FromDTO();
         }
 
         public Section GetSectionById(int id)

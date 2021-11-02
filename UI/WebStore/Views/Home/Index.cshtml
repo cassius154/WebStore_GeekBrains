@@ -11,6 +11,7 @@
 
     var products = ProductService
         .GetProducts()
+        .Products
         .OrderBy(p => p.Order)
         .Take(9)
         .ToProductView();

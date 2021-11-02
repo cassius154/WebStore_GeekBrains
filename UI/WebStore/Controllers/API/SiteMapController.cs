@@ -32,7 +32,7 @@ namespace WebStore.Controllers.API
                 nodes.Add(new(Url.Action("Index", "Catalog", new { BrandId = brand.Id })));
             }
 
-            foreach (var product in productService.GetProducts())
+            foreach (var product in productService.GetProducts().Products)
             {
                 nodes.Add(new(Url.Action("Details", "Catalog", new { product.Id })));
             }

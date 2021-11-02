@@ -43,8 +43,8 @@
             {
                 <div class="total_area">
                     <ul>
-                        <li>Позиций <span>@ViewBag.ItemsCount.ToString()</span></li>
-                        <li>Итого <span>@ViewBag.TotalPrice.ToString("C")</span></li>
+                        <li>Позиций <span id="total-order-pos">@ViewBag.ItemsCount.ToString()</span></li>
+                        <li>Итого <span id="total-order-price">@ViewBag.TotalPrice.ToString("C")</span></li>
                     </ul>
                     <a class="btn btn-default update" href="">Обновить</a>
                     <input class="btn btn-default check_out" type="submit" value="Оформить заказ" />

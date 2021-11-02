@@ -1,4 +1,5 @@
 using System;
+using System.Net.Http;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -7,6 +8,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Polly.Extensions.Http;
+using Polly;
 using WebStore.Domain.Identity;
 using WebStore.Infrastructure.Conventions;
 using WebStore.Infrastructure.Middleware;
@@ -103,10 +106,37 @@ namespace WebStore
                .AddTypedClient<IValuesClient, ValuesClient>()
                .AddTypedClient<IEmployeeService, EmployeesClient>()
                .AddTypedClient<IProductService, ProductsClient>()
-               .AddTypedClient<IOrderService, OrderClient>();
+               .AddTypedClient<IOrderService, OrderClient>()
+               .SetHandlerLifetime(TimeSpan.FromMinutes(5))     // —оздать кеш HttpClient объектов с очисткой его по времени (5 минут)
+               .AddPolicyHandler(getRetryPolicy())              // ѕолитика повторных запросов в случае если WebAPI не отвечает
+               .AddPolicyHandler(getCircuitBreakerPolicy());    // –азрушение потенциальных циклических запросов в большой распределЄнной системе
 
-              services.AddControllersWithViews(opt => opt.Conventions.Add(new TestControllerConvention()))
-                .AddRazorRuntimeCompilation();
+            static IAsyncPolicy<HttpResponseMessage> getRetryPolicy(int maxRetryCount = 5, int maxJitterTime = 1000)
+            {
+                var jitter = new Random();
+                return HttpPolicyExtensions
+                   //не обрабатывать здесь стандартные http-ошибки (404, 403 и т.д.)
+                   .HandleTransientHttpError()                          
+                   .WaitAndRetryAsync(maxRetryCount, RetryAttempt =>
+                        //кол-во повторов и политика повторов -
+                        //увеличивающиес€ интервалы на степень двойки
+                        //(1 сек, 2 сек, 4, 8, 16, 32)
+                        TimeSpan.FromSeconds(Math.Pow(2, RetryAttempt)) +
+                        //чтобы не входить в ритмичный "резонанс",
+                        //когда запросы будут идти четкими ритмами, и рассинхронизировать
+                        //добавл€ем случайное кол-во миллисекунд
+                        TimeSpan.FromMilliseconds(jitter.Next(0, maxJitterTime)));
+            }
+
+            static IAsyncPolicy<HttpResponseMessage> getCircuitBreakerPolicy() =>
+                HttpPolicyExtensions
+                   .HandleTransientHttpError()
+                   //тут к каждому запросу дописываетс€ уникальный id
+                   //и провер€етс€, что по этим id не образуютс€ циклы
+                   .CircuitBreakerAsync(handledEventsAllowedBeforeBreaking: 5, TimeSpan.FromSeconds(30));
+
+            services.AddControllersWithViews(opt => opt.Conventions.Add(new TestControllerConvention()))
+               .AddRazorRuntimeCompilation();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory log)

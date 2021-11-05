@@ -166,10 +166,16 @@ https://github.com/Infarh/SportsStore/blob/dev/UI/SportsStore/Views/Catalog/Part
 http://localhost:5001/swagger/v1/swagger.json
 
 
-
+где-то тут про SignalR как платформа вместо типа аякса или что-то в этом роде
+нет, это в Blazor :)
+это 2 варианта Blazor - webasm и второй как раз
 
 ==========================================================================
 Урок 8
+https://gb.ru/lessons/180795
+
+
+в 7-м уроке смотреть, где идет минификация cartlogic.js
 
 
 

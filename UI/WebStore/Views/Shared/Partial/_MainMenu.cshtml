@@ -20,8 +20,9 @@
         </li>
         <li><a ws-is-active-route ws-active-route-class="active" asp-controller="Home" asp-action="NotFoundPage">404</a></li>
         <li><a ws-is-active-route ws-active-route-class="active" asp-controller="Home" asp-action="ContactUs">Контакты</a></li>
-        <li><a ws-is-active-route ws-active-route-class="active"  asp-controller="Employees" asp-action="Index">Сотрудники</a></li>
+        <li><a ws-is-active-route ws-active-route-class="active" asp-controller="Employees" asp-action="Index">Сотрудники</a></li>
         <li><a asp-controller="WebAPI" asp-action="Index" class="@IsActive("WebAPI")">WebAPI</a></li>
+        <li><a ws-is-active-route asp-controller="AjaxTest" asp-action="Index">AJAX</a></li>
         @*<active-route></active-route>*@
         @*<QWE></QWE>*@
     </ul>

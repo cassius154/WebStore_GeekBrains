@@ -1,4 +1,4 @@
-﻿atalog = {
+﻿Catalog = {
     _properties: {
         getViewLink: ""
     },

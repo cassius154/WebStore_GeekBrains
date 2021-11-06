@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.SignalR.Client;
 using WebStoreClient;
 
 namespace WebStore.TestConsole
@@ -41,8 +42,35 @@ namespace WebStore.TestConsole
         //    public int Age { get; set; }
         //}
 
+
+        private static void _onMessageFromClient(string Message)
+        {
+            Console.WriteLine("Message from server: {0}", Message);
+        }
+
         static async Task Main(string[] args)
         {
+            var builder = new HubConnectionBuilder();
+            var connection = builder
+               .WithUrl("http://localhost:5000/chat")
+               .Build();
+
+            using var registration = connection.On<string>("MessageFromClient", _onMessageFromClient);
+
+            Console.WriteLine("Готов к подключению.");
+            Console.ReadLine();
+
+            await connection.StartAsync();
+
+            Console.WriteLine("Соединение установлено.");
+
+            while (true)
+            {
+                var message = Console.ReadLine();
+                await connection.InvokeAsync("SendMessage", message);
+            }
+
+            return;
 
             //swaggerClient.cs лежит в каталоге obj/
             var client = new HttpClient()
@@ -58,7 +86,7 @@ namespace WebStore.TestConsole
             //var products = 
                 //await api.ProductsAsync(new ProductFilter());
 
-            var employee = await api.Employees4Async(2);
+            //var employee = await api.Employees4Async(2);
 
 
             //======================================================================

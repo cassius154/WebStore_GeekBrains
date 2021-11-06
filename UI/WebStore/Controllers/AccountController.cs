@@ -30,6 +30,15 @@ namespace WebStore.Controllers
         #region Register
 
         [AllowAnonymous]
+        //для удаленной проверки имя параметра должно совпадать с именем свойства модели (RegisterUserViewModel.UserName)
+        //потому что скрипт будет отправлять данные именно с этим именем
+        public async Task<IActionResult> IsNameFree(string UserName)
+        {
+            var user = await _userManager.FindByNameAsync(UserName);
+            return Json(user is null ? "true" : $"Пользователь с именем {UserName} уже существует");
+        }
+
+        [AllowAnonymous]
         public IActionResult Register() => View();
 
         //AntiForgeryToken - к форме прикрепляется некая информация, которую заранее передает сервер
@@ -139,5 +148,6 @@ namespace WebStore.Controllers
                 User.Identity!.Name, HttpContext.Request.Path);
             return View();
         }
+
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Mvc;
 
 namespace WebStore.ViewModels.Identity
 {
@@ -6,6 +7,7 @@ namespace WebStore.ViewModels.Identity
     {
         [Required]
         [Display(Name = "Логин")]
+        [Remote("IsNameFree", "Account")]
         public string UserName { get; set; }
 
         [Required]

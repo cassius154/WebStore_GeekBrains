@@ -6,6 +6,7 @@ https://gb.ru/courses/55
 ==========================================================================
 Урок 1
 https://gb.ru/lessons/162054
+https://docs.google.com/document/d/1waAexISKMLNlUE8fazjCzubdNdP2Higp9XK7KH69Alk/edit#heading=h.gjdgxs
 
 1:32:25		- Объяснения про git, branches и pull request
 
@@ -13,6 +14,8 @@ https://gb.ru/lessons/162054
 ==========================================================================
 Урок 2
 https://gb.ru/lessons/162055
+https://docs.google.com/document/d/1zp7BXqhlI5hWmhUPkztmne2ldiXZao0U8IgMsvorEZk/edit
+
 
 0:56:55		- восстановление клиентских библиотек при сборке, создание и изменение .gitignore
 2:03:26		- публикация приложения
@@ -22,6 +25,8 @@ https://gb.ru/lessons/162055
 ==========================================================================
 Урок 3
 https://gb.ru/lessons/162056
+https://docs.google.com/document/d/1ioDDbw2LMlYCqGR6t3RwLAqsofKSexqcympk3xHX4kw/edit
+
 
 0:21:12		- схема обработки запроса в ASP.NET Core
 
@@ -35,6 +40,8 @@ https://gb.ru/lessons/162056
 ==========================================================================
 Урок 4
 https://gb.ru/lessons/162057
+https://docs.google.com/document/d/1qVYrH8BslGjz9KriQCGBcu8ce41X1kJQCDiS-tW0IRI/edit
+
 
 1:00:27		- альтернативный способ живого изменения проекта без перекомпиляции (dotnet watch run)
 
@@ -43,6 +50,7 @@ https://gb.ru/lessons/162057
 ==========================================================================
 Урок 5
 https://gb.ru/lessons/162058
+https://docs.google.com/document/d/1xmamONBG7T83AyaYb5wLZBYEu2jL5NZfYp7xcR0s5Og/edit
 
 0:48:00		- про миграции (теория)
 1:39:10		- идентификационные таблицы
@@ -53,16 +61,20 @@ https://gb.ru/lessons/162058
 ==========================================================================
 Урок 6
 https://gb.ru/lessons/162059
-
+https://docs.google.com/document/d/1JFKb__4HCoM8KAxrQuTFTarTtSiEYn39a4t9-bVPXQ0/edit
 
 ==========================================================================
 Урок 7
 https://gb.ru/lessons/162060
+https://docs.google.com/document/d/1MJ3jUAju1CfmYTaxcV43-KcJJYIyNHhjBIhgDiv0D1Q/edit
+
 
 
 ==========================================================================
 Урок 8
 https://gb.ru/lessons/162061
+https://docs.google.com/document/d/13wfIzCG8zjZHe9ZotFzAi_g0khMsbSOWjb7L_7fwpwY/edit
+
 
 1:00:50		- DateTimeOffset
 

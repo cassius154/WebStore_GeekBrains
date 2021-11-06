@@ -71,6 +71,7 @@ namespace WebStore.Services.Services.SQL
             if (filter is { PageSize: > 0 and var pageSize, Page: > 0 and var pageNumber })
             {
                 ret = ret
+                    .OrderBy(p => p.Order)  //без OrderBy сыплются предупреждения
                    .Skip((pageNumber - 1) * pageSize)
                    .Take(pageSize);
             }

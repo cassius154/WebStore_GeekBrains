@@ -13,7 +13,7 @@ namespace WebStore.TagHelpers
 {
     public class Pager : TagHelper
     {
-        private readonly IUrlHelperFactory _urlHelperFactory;
+        //private readonly IUrlHelperFactory _urlHelperFactory;
 
         public string PageAction { get; set; }
 
@@ -25,23 +25,23 @@ namespace WebStore.TagHelpers
         [ViewContext, HtmlAttributeNotBound]
         public ViewContext ViewContext { get; set; }
 
-        public Pager(IUrlHelperFactory urlHelperFactory) => _urlHelperFactory = urlHelperFactory;
+        //public Pager(IUrlHelperFactory urlHelperFactory) => _urlHelperFactory = urlHelperFactory;
 
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
             var ul = new TagBuilder("ul");
             ul.AddCssClass("pagination");
 
-            var urlHelper = _urlHelperFactory.GetUrlHelper(ViewContext);
+            //var urlHelper = _urlHelperFactory.GetUrlHelper(ViewContext);
             for (var i = 1; i <= PageModel.TotalPages; i++)
             {
-                ul.InnerHtml.AppendHtml(_createElement(i, urlHelper));
+                ul.InnerHtml.AppendHtml(_createElement(i/*, urlHelper*/));
             }
 
             output.Content.AppendHtml(ul);
         }
 
-        private TagBuilder _createElement(int PageNumber, IUrlHelper Url)
+        private TagBuilder _createElement(int PageNumber/*, IUrlHelper Url*/)
         {
             var li = new TagBuilder("li");
             var a = new TagBuilder("a");
@@ -53,8 +53,18 @@ namespace WebStore.TagHelpers
             }
             else
             {
-                PageUrlValues["page"] = PageNumber;
-                a.Attributes["href"] = Url.Action(PageAction, PageUrlValues);
+                //PageUrlValues["page"] = PageNumber;
+                //a.Attributes["href"] = Url.Action(PageAction, PageUrlValues);
+                a.Attributes["href"] = "#";
+            }
+
+            PageUrlValues["page"] = PageNumber;
+
+
+            foreach (var (key, value) in PageUrlValues.Select(v => (v.Key, Value: v.Value?.ToString())).Where(v => v.Value?.Length > 0))
+            {
+                //if(value.ToString() is { Length: > 0 } str_value)
+                a.MergeAttribute($"data-{key}", value);
             }
 
             li.InnerHtml.AppendHtml(a);

@@ -157,7 +157,9 @@ namespace WebStore
             //app.UseStatusCodePages();
             app.UseStatusCodePagesWithRedirects("~/Home/Status/{0}");
 
-            app.UseStaticFiles();
+            app.UseBlazorFrameworkFiles();
+            app.UseStaticFiles();  //этот вызов отдаст и blazor-овский index.html
+
             app.UseRouting();
 
             app.UseAuthentication();
@@ -190,7 +192,14 @@ namespace WebStore
                 //endpoints.MapDefaultControllerRoute();
                 endpoints.MapControllerRoute(
                     "default",
-                    "{controller=Home}/{action=Index}/{id?}");
+                    //из-за MapFallbackToFile убираем тут Home
+                    //если контроллер указан - по умолчанию вызываем Index
+                    //иначе - MapFallbackToFile отправит на index.html
+                    "{controller}/{action=Index}/{id?}");
+                    //"{controller=Home}/{action=Index}/{id?}");
+
+                //все неразрешенные маршруты будут направляться на index.html (а там Blazor сидит :) )
+                endpoints.MapFallbackToFile("index.html");
             });
         }
     }

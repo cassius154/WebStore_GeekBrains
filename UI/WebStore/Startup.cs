@@ -23,6 +23,7 @@ using WebStore.WebAPI.Clients.Identity;
 using WebStore.WebAPI.Clients.Orders;
 using WebStore.WebAPI.Clients.Products;
 using WebStore.WebAPI.Clients.Values;
+using WebStore.Hubs;
 
 namespace WebStore
 {
@@ -137,6 +138,8 @@ namespace WebStore
 
             services.AddControllersWithViews(opt => opt.Conventions.Add(new TestControllerConvention()))
                .AddRazorRuntimeCompilation();
+
+            services.AddSignalR();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory log)
@@ -171,6 +174,8 @@ namespace WebStore
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapHub<ChatHub>("/chat");
+
                 endpoints.MapGet("/greetings", async context =>
                 {
                     await context.Response.WriteAsync(Configuration["Greeting"]);

@@ -7,11 +7,14 @@ using WebStore.Services.DTO;
 using WebStore.Interfaces.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.Collections.Generic;
 
 namespace WebStore.Controllers
 {
     public class CatalogController : Controller
     {
+        private const string __pageSizeConfig = "CatalogPageSize";
+
         private readonly IProductService _productService;
         private readonly IConfiguration _configuration;
         private readonly ILogger<CatalogController> _logger;
@@ -28,7 +31,7 @@ namespace WebStore.Controllers
         public IActionResult Index(int? brandId, int? sectionId, int page = 1, int? pageSize = null)
         {
             var pSize = pageSize
-                ?? (int.TryParse(_configuration["CatalogPageSize"], out var value) ? value : null);
+                ?? (int.TryParse(_configuration[__pageSizeConfig], out var value) ? value : null);
 
             var filter = new ProductFilter
             {
@@ -70,6 +73,25 @@ namespace WebStore.Controllers
             }
 
             return View(product.ToProductView());
+        }
+
+
+        public IActionResult GetProductsView(int? brandId, int? sectionId, int page = 1, int? pageSize = null)
+        {
+            var products = _getProducts(brandId, sectionId, page, pageSize);
+            return PartialView("Partial/_Products", products);
+        }
+
+        private IEnumerable<ProductViewModel> _getProducts(int? brandId, int? sectionId, int page, int? pageSize)
+        {
+            var products = _productService.GetProducts(new()
+            {
+                BrandId = brandId,
+                SectionId = sectionId,
+                Page = page,
+                PageSize = pageSize ?? _configuration.GetValue(__pageSizeConfig, 6)
+            });
+            return products.Products.OrderBy(p => p.Order).ToProductView();
         }
     }
 }

@@ -71,6 +71,13 @@ namespace WebStore.Tests.Controllers
             valuesServiceMock.Setup(s => s.GetAll()).Returns(_expectedValues);
 
             var cartServiceMock = new Mock<ICartService>();
+
+            //можно так - тут Items = null
+            //cartServiceMock.Setup(s => s.GetViewModel()).Returns(new CartViewModel { });
+            //или так - тут Empty
+            //cartServiceMock.Setup(s => s.GetViewModel()).Returns(new CartViewModel { Items = Enumerable.Empty<(ProductViewModel, int)>() });
+
+            //а тут мы его заполняем, чтобы протестировать еще и сервис корзины
             cartServiceMock.Setup(s => s.GetViewModel()).Returns(
                 new CartViewModel
                 {

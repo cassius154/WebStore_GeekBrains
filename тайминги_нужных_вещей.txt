@@ -193,3 +193,9 @@ https://gb.ru/lessons/180795
 
 1:03:45  - unobtrusive validation
 2:44:35  - О Blazor
+
+
+
+Сертификат
+https://gb.ru/certificates/1469424
+

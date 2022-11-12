@@ -1,18 +1,22 @@
 cassius154@users.noreply.github.com
 
-Уровеень 1
+Уровень 1
 https://gb.ru/courses/55
 
 ==========================================================================
 Урок 1
+Введение в ASP.NET Core
 https://gb.ru/lessons/162054
 https://docs.google.com/document/d/1waAexISKMLNlUE8fazjCzubdNdP2Higp9XK7KH69Alk/edit#heading=h.gjdgxs
 
-1:32:25		- Объяснения про git, branches и pull request
-
+00:18:20	- Начало
+00:20:25	- План курса по урокам
+00:26:35	- 
+01:32:25	- Объяснения про git, branches и pull request
 
 ==========================================================================
 Урок 2
+Движок Razor
 https://gb.ru/lessons/162055
 https://docs.google.com/document/d/1zp7BXqhlI5hWmhUPkztmne2ldiXZao0U8IgMsvorEZk/edit
 
@@ -24,6 +28,7 @@ https://docs.google.com/document/d/1zp7BXqhlI5hWmhUPkztmne2ldiXZao0U8IgMsvorEZk/
 
 ==========================================================================
 Урок 3
+Настройка приложения ASP.NET Core MVC
 https://gb.ru/lessons/162056
 https://docs.google.com/document/d/1ioDDbw2LMlYCqGR6t3RwLAqsofKSexqcympk3xHX4kw/edit
 
@@ -39,6 +44,7 @@ https://docs.google.com/document/d/1ioDDbw2LMlYCqGR6t3RwLAqsofKSexqcympk3xHX4kw/
 
 ==========================================================================
 Урок 4
+Продолжаем изучать ASP.NET Core MVC
 https://gb.ru/lessons/162057
 https://docs.google.com/document/d/1qVYrH8BslGjz9KriQCGBcu8ce41X1kJQCDiS-tW0IRI/edit
 
@@ -49,6 +55,7 @@ https://docs.google.com/document/d/1qVYrH8BslGjz9KriQCGBcu8ce41X1kJQCDiS-tW0IRI/
 
 ==========================================================================
 Урок 5
+Работа с базой данных с использованием Entity Framework Core
 https://gb.ru/lessons/162058
 https://docs.google.com/document/d/1xmamONBG7T83AyaYb5wLZBYEu2jL5NZfYp7xcR0s5Og/edit
 
@@ -60,11 +67,13 @@ https://docs.google.com/document/d/1xmamONBG7T83AyaYb5wLZBYEu2jL5NZfYp7xcR0s5Og/
   
 ==========================================================================
 Урок 6
+Настройка авторизации и аутентификации
 https://gb.ru/lessons/162059
 https://docs.google.com/document/d/1JFKb__4HCoM8KAxrQuTFTarTtSiEYn39a4t9-bVPXQ0/edit
 
 ==========================================================================
 Урок 7
+Bundling, Разделение по ролям, Корзина.
 https://gb.ru/lessons/162060
 https://docs.google.com/document/d/1MJ3jUAju1CfmYTaxcV43-KcJJYIyNHhjBIhgDiv0D1Q/edit
 
@@ -72,6 +81,7 @@ https://docs.google.com/document/d/1MJ3jUAju1CfmYTaxcV43-KcJJYIyNHhjBIhgDiv0D1Q/
 
 ==========================================================================
 Урок 8
+Завершение работы и развертывание сайта на хостинге.
 https://gb.ru/lessons/162061
 https://docs.google.com/document/d/13wfIzCG8zjZHe9ZotFzAi_g0khMsbSOWjb7L_7fwpwY/edit
 
@@ -101,7 +111,7 @@ https://gb.ru/courses/306
 
 ==========================================================================
 Урок 1
-
+Сервис-ориентированная архитектура
 https://gb.ru/lessons/180788
 
 Вопрос про Location в CreateAtAction
@@ -109,6 +119,7 @@ https://gb.ru/lessons/180788
 
 ==========================================================================
 Урок 2
+Web api 2. Лучшие практики реализации
 https://gb.ru/lessons/180789
 
 0:30:10		- Про POST
@@ -122,6 +133,7 @@ https://gb.ru/lessons/180789
 
 ==========================================================================
 Урок 3
+Web api 2. Продолжение
 https://gb.ru/lessons/180790
 
 
@@ -132,6 +144,7 @@ https://gb.ru/lessons/180790
 
 ==========================================================================
 Урок 4
+Обработка ошибок и логирование
 https://gb.ru/lessons/180791
 
 
@@ -139,6 +152,7 @@ https://gb.ru/lessons/180791
 
 ==========================================================================
 Урок 5
+Тесты. Unit-тестирование. TDD.
 https://gb.ru/lessons/180792
 
 1:28:50  - модульное тестирование на GitHub
@@ -149,6 +163,7 @@ https://gb.ru/lessons/180792
 
 ==========================================================================
 Урок 6
+Навигация, «хлебные крошки», sitemap
 https://gb.ru/lessons/180793
 
 
@@ -165,6 +180,7 @@ https://youtu.be/u9i2vc-FetE  тут про Automapper что-то есть
 
 ==========================================================================
 Урок 7
+Асинхронное обновление представлений.
 https://gb.ru/lessons/180794
 
 https://habr.com/ru/company/dododev/blog/503376/   //повышение надежности клиентов для отказоустойчивого взаимодействия с WebAPI-сервисами
@@ -184,6 +200,7 @@ http://localhost:5001/swagger/v1/swagger.json
 
 ==========================================================================
 Урок 8
+Завершение работы над проектом
 https://gb.ru/lessons/180795
 
 
